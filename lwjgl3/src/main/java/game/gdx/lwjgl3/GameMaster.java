@@ -16,6 +16,6 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		System.out.println("Hello World");
+		System.out.println("Hello Daniel!!");
 	}
 }
