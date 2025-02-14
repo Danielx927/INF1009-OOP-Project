@@ -1,6 +1,6 @@
 package game.gdx.lwjgl3;
 
-public class Mole {
+public class Mole extends Entity {
 
 	private int points;
 	private boolean isVisible;
