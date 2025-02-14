@@ -5,11 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter{
-
+	private IOManager IOmgr;
+	
 	@Override
 	public void create()
 	{
-		
+		IOmgr = new IOManager();
 	}
 	
 	@Override
@@ -17,5 +18,7 @@ public class GameMaster extends ApplicationAdapter{
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 		System.out.println("Hello srinithi!!");
+		
+		IOmgr.update();
 	}
 }
