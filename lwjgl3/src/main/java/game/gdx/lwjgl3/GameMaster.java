@@ -23,6 +23,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void create()
 	{
 		IOmgr = new IOManager();
+		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
 		
@@ -35,14 +36,14 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		System.out.println("Hello srinithi!!");
+		//System.out.println("Hello srinithi!!");
 		
-		IOmgr.update();
 	}
 	
 	@Override
 	public void dispose()
 	{
+		IOmgr.dispose();
 		batch.dispose();
 	}
 }
