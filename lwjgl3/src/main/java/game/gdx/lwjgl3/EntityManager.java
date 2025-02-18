@@ -20,11 +20,23 @@ public class EntityManager {
 		entityList.remove(e);
 	}
 	
-	void draw(SpriteBatch b) {
+	void update(float delta) {
+		List<Entity> molesToRemove = new ArrayList<>();
+		for (Entity e : entityList) {
+			if (e instanceof Mole) {
+				if (!((Mole) e).isActive(delta)) {
+					molesToRemove.add(e);
+				}
+			}
+		}
+		entityList.removeAll(molesToRemove);
+	}
+	
+	void render(SpriteBatch b) {
 		// Call draw methods for all entities	
 		b.begin();
 		for (Entity e : entityList) {
-			e.draw(b);
+			e.render(b);
 		}
 		b.end();
 	}

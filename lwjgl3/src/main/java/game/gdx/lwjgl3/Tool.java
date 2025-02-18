@@ -49,7 +49,7 @@ public class Tool extends Entity {
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void render(SpriteBatch batch) {
 		if (this.cdIsRunning == true) {
 			if (this.cooldown <= CD_TIMER & this.cooldown != 0) {
 				this.cooldown -= 1;

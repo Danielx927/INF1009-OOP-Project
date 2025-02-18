@@ -17,9 +17,10 @@ public class GameMaster extends ApplicationAdapter{
 	private SpriteBatch batch;
 	private EntityManager em;
 	private GameTile[][] grid;
-	private List<String> players;
-	//Private Timer timer;
-	private int totalPoints;
+	//private List<String> players;
+	private float spawnTimer;
+	private float spawnInterval;
+	//private int totalPoints;
 	//private String playerName;
 	
 	@Override
@@ -31,17 +32,20 @@ public class GameMaster extends ApplicationAdapter{
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
+		spawnTimer = 0;
+		spawnInterval = 2f;
 		
-		grid = new GameTile[3][3];
-		players = new ArrayList<>();
-		totalPoints = 0;
+		int gridRows = 3, gridCols = 3;
+		grid = new GameTile[gridRows][gridCols];
+		//players = new ArrayList<>();
+		//totalPoints = 0;
 		
 		// Codes for grid
 		int leftMargin = 170, bottomMargin = 100;
 		int gameTileWH = 80;
 		
-		for (int row = 0; row < grid.length; row++) {
-			for (int col = 0; col < grid[row].length; col++) {
+		for (int row = 0; row < gridRows; row++) {
+			for (int col = 0; col < gridCols; col++) {
 				grid[row][col] = new GameTile("sprites/yellow_circle.png", leftMargin + 110 * col,
 					bottomMargin + 90 * row, gameTileWH, gameTileWH, false);
 				em.addEntity(grid[row][col]);
@@ -50,12 +54,31 @@ public class GameMaster extends ApplicationAdapter{
 		
 	}
 	
+	private void spawnMole() {
+		int col_index = (int) (Math.random() * grid[0].length);
+		int row_index = (int) (Math.random() * grid.length);
+		GameTile tile = grid[row_index][col_index];
+		if (!tile.getOccupied()) {
+			Mole mole = new Mole("sprites/black_square.png", tile.getX(), tile.getY(), 60, 60, 20, true, 2f);
+			em.addEntity(mole);
+		}
+	}
+	
 	@Override
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		em.draw(batch);
-		redc.draw(batch);
+		
+		spawnTimer += Gdx.graphics.getDeltaTime();
+		if (spawnTimer >= spawnInterval) {
+			spawnMole();
+			spawnTimer = 0;
+		}
+		
+		em.update(Gdx.graphics.getDeltaTime());
+		
+		em.render(batch);
+		redc.render(batch);
 		
 	}
 	

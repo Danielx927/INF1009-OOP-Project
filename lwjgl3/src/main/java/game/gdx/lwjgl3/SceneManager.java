@@ -3,6 +3,8 @@ package game.gdx.lwjgl3;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class SceneManager {
 	private Scene currentScene;
 	private List<Scene> sceneList = new ArrayList<Scene>();
