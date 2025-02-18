@@ -9,11 +9,27 @@ public abstract class Scene {
 	private String name;
 	private List<Entity> entityList = new ArrayList<Entity>();
 	
-	public Scene(String string) {
-		// TODO Auto-generated constructor stub
+	//Initialize name and background
+	public Scene(String name) {
+		this.name = name;
 	}
+	
 	public abstract void load();
 	public abstract void unload();
-
 	
+	public void setBackground(String bgPath) {
+		background = new Texture(Gdx.files.internal(bgPath));
+	}
+	
+	public void drawBackground(SpriteBatch batch) {
+		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	}
+	
+    public void render(SpriteBatch batch) {
+        drawBackground(batch); // Draw the background as a default
+    }
+    
+    public void dispose() {
+    	background.dispose();
+    }
 }

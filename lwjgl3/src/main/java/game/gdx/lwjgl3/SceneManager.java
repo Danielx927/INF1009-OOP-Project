@@ -28,4 +28,10 @@ public class SceneManager {
 		}
 		return instance;
 	}
+    
+	public void render(SpriteBatch batch) {
+		if (currentScene != null) {
+			currentScene.render(batch);
+		}
+	}
 }
