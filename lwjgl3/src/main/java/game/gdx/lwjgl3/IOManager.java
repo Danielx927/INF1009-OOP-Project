@@ -64,7 +64,10 @@ public class IOManager implements InputProcessor, Audio {
         touchPos.set(screenX, screenY);
 		System.out.println(touchPos);
 		tool.clickEvent();
-		soundEffects.get(0).play();
+		if (tool.getCooldown() == tool.getCDTimer()) { // Sound only plays off cd
+			soundEffects.get(0).play();
+		}
+		
 		return true;
 	}
 
@@ -88,9 +91,6 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		
-//		tool.setX(screenX + offset.x);
-//		tool.setY(-screenY + offset.y);
 		tool.getSprite().setPosition(screenX + offset.x, -screenY + offset.y);
 		//System.out.println(tool.getY());
 
