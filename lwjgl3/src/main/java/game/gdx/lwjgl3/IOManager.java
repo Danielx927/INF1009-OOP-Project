@@ -26,7 +26,7 @@ public class IOManager implements InputProcessor, Audio {
     }
     
 	public void populateSfxList() {
-		Sound sfx1 = this.newSound(Gdx.files.internal("sfx1.mp3"));
+		Sound sfx1 = this.newSound(Gdx.files.internal("sounds/sfx1.mp3"));
 		soundEffects.add(sfx1);
 
 	}

@@ -1,6 +1,5 @@
 package game.gdx.lwjgl3;
 
-import com.badlogic.gdx.graphics.Texture;
 
 public class Mole extends Entity {
 
@@ -8,8 +7,8 @@ public class Mole extends Entity {
 	private boolean isVisible;
 	private float speed;
 	
-	public Mole(Texture t, float x, float y, int p, boolean iv, float s) {
-		super(t, x, y);
+	public Mole(String t, float x, float y, float w, float h, int p, boolean iv, float s) {
+		super(t, x, y, w, h);
 		points = p;
 		isVisible = iv;
 		speed = s;
