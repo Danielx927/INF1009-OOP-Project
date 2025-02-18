@@ -8,6 +8,12 @@ public abstract class Entity {
 	private float y;
 	private Texture texture;
 	
+	public Entity(Texture t, float x, float y) {
+		texture = t;
+		this.x = x;
+		this.y = y;
+	}
+	
 	public float getX() {
 		return x;
 	}

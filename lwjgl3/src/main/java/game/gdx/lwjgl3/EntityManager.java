@@ -10,7 +10,7 @@ public class EntityManager {
 		entityList = new ArrayList<>();
 	}
 	
-	void addEntities(Entity e) {
+	void addEntity(Entity e) {
 		entityList.add(e);
 	}
 	
