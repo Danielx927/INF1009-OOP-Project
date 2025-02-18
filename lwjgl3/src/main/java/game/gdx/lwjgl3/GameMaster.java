@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter{
 	private IOManager IOmgr;
-	private GameMaster gameMaster;
 	public Tool redc;
 	
 	private SpriteBatch batch;
@@ -24,9 +24,9 @@ public class GameMaster extends ApplicationAdapter{
 	@Override
 	public void create()
 	{
+		Gdx.graphics.setSystemCursor(SystemCursor.None);
 		redc = new Tool("sprites/red_circle.png", 100, 100);
-		gameMaster = new GameMaster();
-		IOmgr = new IOManager(gameMaster);
+		IOmgr = new IOManager(redc);
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
@@ -40,7 +40,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		//redc.draw(batch);
+		redc.draw(batch);
 		//System.out.println("Hello srinithi!!");
 		
 	}

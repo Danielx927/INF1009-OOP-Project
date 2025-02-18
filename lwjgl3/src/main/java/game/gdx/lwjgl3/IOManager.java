@@ -16,18 +16,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
-	private Vector2 touchPos, mousePos;
+	private Vector2 touchPos, offset;
 	private List<Sound> soundEffects;
-    private GameMaster gameMaster;
+    private Tool tool;
 	private SpriteBatch batch;
 
 
-    public IOManager(GameMaster gameMaster) {
-    	this.gameMaster = gameMaster;
+    public IOManager(Tool tooll) {
+    	this.tool = tooll;
+    	offset = new Vector2(-60,410);
     	batch = new SpriteBatch();
-    	//redCircle = new Tool("sprites/red_circle.png", 100, 100);
     	touchPos = new Vector2();
-    	mousePos = new Vector2();
     	soundEffects = new ArrayList<Sound>();
     	this.populateSfxList();
     	
@@ -64,6 +63,7 @@ public class IOManager implements InputProcessor, Audio {
 		
         touchPos.set(screenX, screenY);
 		System.out.println(touchPos);
+		tool.clickEvent();
 		soundEffects.get(0).play();
 		return true;
 	}
@@ -89,11 +89,11 @@ public class IOManager implements InputProcessor, Audio {
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		
-		//mousePos.set(screenX, screenY);
-		//gameMaster.redc.setX(screenX);
-		//gameMaster.redc.setY(screenY);
-		
-		//System.out.println(redCircle);
+//		tool.setX(screenX + offset.x);
+//		tool.setY(-screenY + offset.y);
+		tool.getSprite().setPosition(screenX + offset.x, -screenY + offset.y);
+		//System.out.println(tool.getY());
+
 		return true;
 	}
 
