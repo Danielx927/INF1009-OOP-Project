@@ -12,13 +12,20 @@ import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
-	private Vector2 touchPos;
+	private Vector2 touchPos, offset;
 	private List<Sound> soundEffects;
+    private Tool tool;
+	private SpriteBatch batch;
 
-    public IOManager() {
+
+    public IOManager(Tool tooll) {
+    	this.tool = tooll;
+    	offset = new Vector2(-60,410);
+    	batch = new SpriteBatch();
     	touchPos = new Vector2();
     	soundEffects = new ArrayList<Sound>();
     	this.populateSfxList();
@@ -56,7 +63,11 @@ public class IOManager implements InputProcessor, Audio {
 		
         touchPos.set(screenX, screenY);
 		System.out.println(touchPos);
-		soundEffects.get(0).play();
+		tool.clickEvent();
+		if (tool.getCooldown() == tool.getCDTimer()) { // Sound only plays off cd
+			soundEffects.get(0).play();
+		}
+		
 		return true;
 	}
 
@@ -80,8 +91,10 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
+		tool.getSprite().setPosition(screenX + offset.x, -screenY + offset.y);
+		//System.out.println(tool.getY());
+
+		return true;
 	}
 
 	@Override
@@ -130,5 +143,6 @@ public class IOManager implements InputProcessor, Audio {
 		for (int i = 0; i < soundEffects.size(); i++) {
 			soundEffects.get(i).dispose();
 		}
+		batch.dispose();
 	}
 }

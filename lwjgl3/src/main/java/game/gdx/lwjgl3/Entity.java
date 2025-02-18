@@ -19,11 +19,17 @@ public abstract class Entity {
 		height = h;
 	}
 	
+	public Entity(String t, float x, float y) {
+		this.setTexture(t);
+		this.setX(x);
+		this.setY(y);
+	}
+	
 	public float getX() {
 		return x;
 	}
 	
-	void setX(float x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
@@ -31,7 +37,7 @@ public abstract class Entity {
 		return y;
 	}
 	
-	void setY(float y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
@@ -39,10 +45,11 @@ public abstract class Entity {
 		return texture;
 	}
 	
-	void setTexture(Texture t) {
-		this.texture = t;
+	public void setTexture(String t) {
+		texture = new Texture(Gdx.files.internal(t));
 	}
 	
+<<<<<<< HEAD
 	public float getWidth() {
 		return width;
 	}
@@ -62,5 +69,11 @@ public abstract class Entity {
 	void draw(SpriteBatch b) {
 		b.draw(this.getTexture(), this.getX(), this.getY(), 
 				this.getWidth(), this.getHeight());
+=======
+	public void draw(SpriteBatch b) {
+		b.begin();
+		b.draw(this.getTexture(), this.getX(), this.getY(), this.getTexture().getWidth(), this.getTexture().getHeight());
+		b.end();
+>>>>>>> origin/main
 	}
 }
