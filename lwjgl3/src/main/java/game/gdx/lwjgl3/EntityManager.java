@@ -6,10 +6,15 @@ import java.util.List;
 public class EntityManager {
 	private List<Entity> entityList;
 	
+	public EntityManager() {
+		entityList = new ArrayList<>();
+	}
+	
 	void addEntities(Entity e) {
-		if (entityList == null) {
-			entityList = new ArrayList<>();
-		}
 		entityList.add(e);
+	}
+	
+	void removeEntity(Entity e) {
+		entityList.remove(e);
 	}
 }
