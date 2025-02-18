@@ -12,21 +12,29 @@ import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
-	private Vector2 touchPos;
+	private Vector2 touchPos, mousePos;
 	private List<Sound> soundEffects;
+    private GameMaster gameMaster;
+	private SpriteBatch batch;
 
-    public IOManager() {
+
+    public IOManager(GameMaster gameMaster) {
+    	this.gameMaster = gameMaster;
+    	batch = new SpriteBatch();
+    	//redCircle = new Tool("sprites/red_circle.png", 100, 100);
     	touchPos = new Vector2();
+    	mousePos = new Vector2();
     	soundEffects = new ArrayList<Sound>();
     	this.populateSfxList();
     	
     }
     
 	public void populateSfxList() {
-		Sound sfx1 = this.newSound(Gdx.files.internal("sfx1.mp3"));
+		Sound sfx1 = this.newSound(Gdx.files.internal("sounds/sfx1.mp3"));
 		soundEffects.add(sfx1);
 
 	}
@@ -80,8 +88,13 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		//mousePos.set(screenX, screenY);
+		//gameMaster.redc.setX(screenX);
+		//gameMaster.redc.setY(screenY);
+		
+		//System.out.println(redCircle);
+		return true;
 	}
 
 	@Override
@@ -130,5 +143,6 @@ public class IOManager implements InputProcessor, Audio {
 		for (int i = 0; i < soundEffects.size(); i++) {
 			soundEffects.get(i).dispose();
 		}
+		batch.dispose();
 	}
 }

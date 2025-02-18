@@ -1,5 +1,6 @@
 package game.gdx.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -8,11 +9,17 @@ public abstract class Entity {
 	private float y;
 	private Texture texture;
 	
+	public Entity(String t, float x, float y) {
+		this.setTexture(t);
+		this.setX(x);
+		this.setY(y);
+	}
+	
 	public float getX() {
 		return x;
 	}
 	
-	void setX(float x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
@@ -20,7 +27,7 @@ public abstract class Entity {
 		return y;
 	}
 	
-	void setY(float y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
@@ -28,11 +35,13 @@ public abstract class Entity {
 		return texture;
 	}
 	
-	void setTexture(Texture t) {
-		this.texture = t;
+	public void setTexture(String t) {
+		texture = new Texture(Gdx.files.internal(t));
 	}
 	
-	void draw(SpriteBatch b) {
-		this.draw(b);
+	public void draw(SpriteBatch b) {
+		b.begin();
+		b.draw(this.getTexture(), this.getX(), this.getY(), this.getTexture().getWidth(), this.getTexture().getHeight());
+		b.end();
 	}
 }

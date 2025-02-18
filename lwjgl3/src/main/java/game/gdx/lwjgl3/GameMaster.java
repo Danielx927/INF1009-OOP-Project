@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter{
 	private IOManager IOmgr;
+	private GameMaster gameMaster;
+	public Tool redc;
 	
 	private SpriteBatch batch;
 	private EntityManager em;
@@ -22,7 +24,9 @@ public class GameMaster extends ApplicationAdapter{
 	@Override
 	public void create()
 	{
-		IOmgr = new IOManager();
+		redc = new Tool("sprites/red_circle.png", 100, 100);
+		gameMaster = new GameMaster();
+		IOmgr = new IOManager(gameMaster);
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
@@ -36,6 +40,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
+		//redc.draw(batch);
 		//System.out.println("Hello srinithi!!");
 		
 	}
