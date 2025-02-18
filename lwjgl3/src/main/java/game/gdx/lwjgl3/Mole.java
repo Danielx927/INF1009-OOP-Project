@@ -3,20 +3,25 @@ package game.gdx.lwjgl3;
 
 public class Mole extends Entity {
 
-	public Mole(String t, float x, float y) {
-		super(t, x, y);
-		// TODO Auto-generated constructor stub
-	}
-
 	private int points;
 	private boolean isVisible;
-	private float speed;
+	private int duration;
 	
-	public Mole(String t, float x, float y, float w, float h, int p, boolean iv, float s) {
+	public Mole(String t, float x, float y, float w, float h, int p, boolean iv, int d) {
 		super(t, x, y, w, h);
 		points = p;
 		isVisible = iv;
-		speed = s;
+		duration = d;
+	}
+	
+	public void spawn() {
+		
+	}
+	
+	public void disappear() {
+		if (isVisible) {
+			isVisible = false;
+		}
 	}
 	
 	public int getPoints() {
@@ -35,11 +40,11 @@ public class Mole extends Entity {
 		isVisible = b;
 	}
 	
-	public float getSpeed() {
-		return speed;
+	public float getDuration() {
+		return duration;
 	}
 	
-	void setSpeed(float s) {
-		speed = s;
+	void setSpeed(int d) {
+		duration = d;;
 	}
 }
