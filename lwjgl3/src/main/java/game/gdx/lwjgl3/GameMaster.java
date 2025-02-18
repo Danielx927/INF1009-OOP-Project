@@ -38,7 +38,7 @@ public class GameMaster extends ApplicationAdapter{
 		
 		for (int row = 0; row < grid.length; row++) {
 			for (int col = 0; col < grid[row].length; col++) {
-				grid[row][col] = new GameTile("sprites/red_circle.png", leftMargin + 110 * col,
+				grid[row][col] = new GameTile("sprites/yellow_circle.png", leftMargin + 110 * col,
 					bottomMargin + 90 * row, gameTileWH, gameTileWH, false);
 				em.addEntity(grid[row][col]);
 			}
