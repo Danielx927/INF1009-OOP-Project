@@ -49,7 +49,6 @@ public abstract class Entity {
 		texture = new Texture(Gdx.files.internal(t));
 	}
 	
-<<<<<<< HEAD
 	public float getWidth() {
 		return width;
 	}
@@ -69,11 +68,6 @@ public abstract class Entity {
 	void draw(SpriteBatch b) {
 		b.draw(this.getTexture(), this.getX(), this.getY(), 
 				this.getWidth(), this.getHeight());
-=======
-	public void draw(SpriteBatch b) {
-		b.begin();
-		b.draw(this.getTexture(), this.getX(), this.getY(), this.getTexture().getWidth(), this.getTexture().getHeight());
-		b.end();
->>>>>>> origin/main
+
 	}
 }

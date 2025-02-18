@@ -5,11 +5,8 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-<<<<<<< HEAD
 import com.badlogic.gdx.graphics.Texture;
-=======
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
->>>>>>> origin/main
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -23,7 +20,7 @@ public class GameMaster extends ApplicationAdapter{
 	private List<String> players;
 	//Private Timer timer;
 	private int totalPoints;
-	private String playerName;
+	//private String playerName;
 	
 	@Override
 	public void create()
@@ -57,13 +54,9 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-<<<<<<< HEAD
 		em.draw(batch);
-=======
 		redc.draw(batch);
-		//System.out.println("Hello srinithi!!");
 		
->>>>>>> origin/main
 	}
 	
 	@Override
