@@ -50,8 +50,12 @@ public class IOManager implements InputProcessor, Audio {
 	
 	public void populatePlaylist() {
 		Music starlings = this.newMusic(Gdx.files.internal("music/starlings.mp3"));
+		Music jungle = this.newMusic(Gdx.files.internal("music/jungle.mp3"));
+
 		
 		playlist.put("starlings", starlings);
+		playlist.put("jungle", jungle);
+
 
 	}
 	
@@ -134,25 +138,25 @@ public class IOManager implements InputProcessor, Audio {
 		return Gdx.audio.newSound(fileHandle);
 	}
 		
-	public void playSound(String code, float vol) {
+	public void playSound(String key, float vol) {
 		try {
-			soundEffects.get(code).play(vol);
+			soundEffects.get(key).play(vol);
 		}  
 		catch (NullPointerException e) {
-            System.out.print("NullPointerException: Ensure code exists as a key in the soundEffects HashMap.\n");
+            System.out.print("NullPointerException: Ensure the key exists in the soundEffects HashMap.\n");
         }
 	}
 	
-	public void playMusic(String code, Boolean looping, float vol) {
+	public void playMusic(String key, Boolean looping, float vol) {
 		if (currentTrack != null) currentTrack.stop();
 		try {
-			currentTrack = playlist.get(code);
+			currentTrack = playlist.get(key);
 			currentTrack.setLooping(looping);
 			currentTrack.setVolume(vol);
 			currentTrack.play();
 		}
 		catch (NullPointerException e) {
-            System.out.print("NullPointerException: Ensure code exists as a key in the playlist HashMap.\n");
+            System.out.print("NullPointerException: Ensure the key exists in the playlist HashMap.\n");
 		}
 	}
 

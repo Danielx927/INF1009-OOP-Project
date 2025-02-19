@@ -1,11 +1,8 @@
 package game.gdx.lwjgl3;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -21,13 +18,18 @@ public class GameMaster extends ApplicationAdapter{
 	private float spawnInterval;
 	//private int totalPoints;
 	//private String playerName;
-	private Scene mainMenu;
+	public static CollisionManager collisionManager;
+
 	
 	@Override
 	public void create()
 	{
+
 		tool = new Tool("sprites/red_circle.png", 100, 100);
+        collisionManager = new CollisionManager(new ArrayList<>());
+        collisionManager.addCollidable(tool); // Add the Tool (red circle)
 		IOmgr = new IOManager(tool);
+
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
@@ -50,7 +52,7 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
-		IOmgr.playMusic("starlings", true, 0.2f);
+		IOmgr.playMusic("jungle", true, 0.5f);
 
 		
 	}
@@ -78,9 +80,18 @@ public class GameMaster extends ApplicationAdapter{
 		}
 		
 		em.update(Gdx.graphics.getDeltaTime());
-		
+		// Update Tool position to match mouse cursor
+	    tool.setX(Gdx.input.getX());
+	    tool.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
+	    if (Gdx.input.isTouched()) { // Check when clicking
+	        System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
+	    }
+	    
+		collisionManager.checkCollisions();
 		em.render(batch);
 		tool.render(batch);
+		
+
 		
 	}
 	
