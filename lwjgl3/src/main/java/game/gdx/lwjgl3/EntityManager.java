@@ -40,6 +40,7 @@ public class EntityManager {
 		        if (e instanceof InteractiveObject) {
 		            InteractiveObject mole = (InteractiveObject) e;
 
+
 		            // Remove if mole is inactive (expired) OR not visible (was clicked)
 		            if (!mole.isActive(delta) || !mole.getIsVisible()) {
 		                molesToRemove.add(mole);

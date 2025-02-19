@@ -1,11 +1,8 @@
 package game.gdx.lwjgl3;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -75,7 +72,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		
+	
 		spawnTimer += Gdx.graphics.getDeltaTime();
 		if (spawnTimer >= spawnInterval) {
 			spawnMole();
