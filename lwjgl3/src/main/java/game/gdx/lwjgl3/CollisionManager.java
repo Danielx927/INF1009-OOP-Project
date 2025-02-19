@@ -26,7 +26,7 @@ public class CollisionManager {
 
                 if (a == null || b == null || a == b) continue;
 
-                if ((a instanceof Tool && b instanceof Mole) || (a instanceof Mole && b instanceof Tool)) {
+                if ((a instanceof Tool && b instanceof InteractiveObject) || (a instanceof InteractiveObject && b instanceof Tool)) {
                     System.out.println("Click collision check: " + a + " vs " + b);
 
                     if (a.collidesWith(b)) {

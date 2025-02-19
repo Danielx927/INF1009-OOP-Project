@@ -37,8 +37,8 @@ public class EntityManager {
 		 List<Entity> molesToRemove = new ArrayList<>();
 		    
 		    for (Entity e : entityList) {
-		        if (e instanceof Mole) {
-		            Mole mole = (Mole) e;
+		        if (e instanceof InteractiveObject) {
+		            InteractiveObject mole = (InteractiveObject) e;
 
 		            // Remove if mole is inactive (expired) OR not visible (was clicked)
 		            if (!mole.isActive(delta) || !mole.getIsVisible()) {
