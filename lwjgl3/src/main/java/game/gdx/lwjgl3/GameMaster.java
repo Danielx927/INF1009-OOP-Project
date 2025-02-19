@@ -21,6 +21,7 @@ public class GameMaster extends ApplicationAdapter{
 	private float spawnInterval;
 	//private int totalPoints;
 	//private String playerName;
+	private Scene mainMenu;
 	
 	@Override
 	public void create()
@@ -69,7 +70,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void render()
 	{
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-		
+	
 		spawnTimer += Gdx.graphics.getDeltaTime();
 		if (spawnTimer >= spawnInterval) {
 			spawnMole();
