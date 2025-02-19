@@ -2,17 +2,15 @@ package game.gdx.lwjgl3;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Mole extends Entity {
+public class InteractiveObject extends Entity {
 
 	private int points;
-	private boolean isVisible;
 	private float lifeTime;
 	private float maxLifeTime;
 	
-	public Mole(String t, float x, float y, float w, float h, int p, boolean iv, float d) {
+	public InteractiveObject(String t, float x, float y, float w, float h, int p, float d) {
 		super(t, x, y, w, h);
 		points = p;
-		isVisible = iv;
 		maxLifeTime = d;
 		lifeTime = 0;
 	}
@@ -33,19 +31,9 @@ public class Mole extends Entity {
 		points = p;
 	}
 	
-	public boolean getIsVisible() {
-		return isVisible;
-	}
-	
-	void setIsVisible(boolean b) {
-		isVisible = b;
-	}
-	
 
 	@Override
 	public void render(SpriteBatch b) {
-		if (isVisible) {
-			b.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		}
+		b.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 }

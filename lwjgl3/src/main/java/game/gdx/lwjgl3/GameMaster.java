@@ -33,7 +33,7 @@ public class GameMaster extends ApplicationAdapter{
 		batch = new SpriteBatch();
 		em = new EntityManager();
 		spawnTimer = 0;
-		spawnInterval = 2f;
+		spawnInterval = 1f;
 		
 		int gridRows = 3, gridCols = 3;
 		grid = new GameTile[gridRows][gridCols];
@@ -59,7 +59,7 @@ public class GameMaster extends ApplicationAdapter{
 		int row_index = (int) (Math.random() * grid.length);
 		GameTile tile = grid[row_index][col_index];
 		if (!tile.getOccupied()) {
-			Mole mole = new Mole("sprites/black_square.png", tile.getX(), tile.getY(), 60, 60, 20, true, 2f);
+			InteractiveObject mole = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
 			em.addEntity(mole);
 		}
 	}

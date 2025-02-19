@@ -23,8 +23,8 @@ public class EntityManager {
 	void update(float delta) {
 		List<Entity> molesToRemove = new ArrayList<>();
 		for (Entity e : entityList) {
-			if (e instanceof Mole) {
-				if (!((Mole) e).isActive(delta)) {
+			if (e instanceof InteractiveObject) {
+				if (!((InteractiveObject) e).isActive(delta)) {
 					molesToRemove.add(e);
 				}
 			}
