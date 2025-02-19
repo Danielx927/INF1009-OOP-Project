@@ -6,13 +6,12 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter{
 	private IOManager IOmgr;
-	public Tool redc;
+	private Tool tool;
 	
 	private SpriteBatch batch;
 	private EntityManager em;
@@ -28,17 +27,17 @@ public class GameMaster extends ApplicationAdapter{
 	@Override
 	public void create()
 	{
-		
-		Gdx.graphics.setSystemCursor(SystemCursor.None);
-		redc = new Tool("sprites/red_circle.png", 100, 100);
-		collisionManager = new CollisionManager(new ArrayList<>());
-		collisionManager.addCollidable(redc); // Add the Tool (red circle)
-		IOmgr = new IOManager(redc);
+
+		tool = new Tool("sprites/red_circle.png", 100, 100);
+        collisionManager = new CollisionManager(new ArrayList<>());
+        collisionManager.addCollidable(tool); // Add the Tool (red circle)
+		IOmgr = new IOManager(tool);
+
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
 		spawnTimer = 0;
-		spawnInterval = 2f;
+		spawnInterval = 1f;
 		
 		int gridRows = 3, gridCols = 3;
 		grid = new GameTile[gridRows][gridCols];
@@ -56,6 +55,8 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
+		IOmgr.playMusic("jungle", true, 0.5f);
+
 		
 	}
 	
@@ -64,8 +65,9 @@ public class GameMaster extends ApplicationAdapter{
 		int row_index = (int) (Math.random() * grid.length);
 		GameTile tile = grid[row_index][col_index];
 		if (!tile.getOccupied()) {
-			Mole mole = new Mole("sprites/black_square.png", tile.getX(), tile.getY(), 60, 60, 20, true, 2f);
+			InteractiveObject mole = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
 			em.addEntity(mole);
+			IOmgr.playSound("entitySpawn1", 1.0f);
 		}
 	}
 	
@@ -82,15 +84,15 @@ public class GameMaster extends ApplicationAdapter{
 		
 		em.update(Gdx.graphics.getDeltaTime());
 		// Update Tool position to match mouse cursor
-	    redc.setX(Gdx.input.getX());
-	    redc.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
+	    tool.setX(Gdx.input.getX());
+	    tool.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
 	    if (Gdx.input.isTouched()) { // Check when clicking
-	        System.out.println("Click detected at: (" + redc.getX() + ", " + redc.getY() + ")");
+	        System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
 	    }
 	    
 		collisionManager.checkCollisions();
 		em.render(batch);
-		redc.render(batch);
+		tool.render(batch);
 		
 
 		
