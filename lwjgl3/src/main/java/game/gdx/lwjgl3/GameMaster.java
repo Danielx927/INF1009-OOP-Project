@@ -22,12 +22,17 @@ public class GameMaster extends ApplicationAdapter{
 	private float spawnInterval;
 	//private int totalPoints;
 	//private String playerName;
+	public static CollisionManager collisionManager;
+
 	
 	@Override
 	public void create()
 	{
+		
 		Gdx.graphics.setSystemCursor(SystemCursor.None);
 		redc = new Tool("sprites/red_circle.png", 100, 100);
+		collisionManager = new CollisionManager(new ArrayList<>());
+		collisionManager.addCollidable(redc); // Add the Tool (red circle)
 		IOmgr = new IOManager(redc);
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
@@ -76,9 +81,18 @@ public class GameMaster extends ApplicationAdapter{
 		}
 		
 		em.update(Gdx.graphics.getDeltaTime());
-		
+		// Update Tool position to match mouse cursor
+	    redc.setX(Gdx.input.getX());
+	    redc.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
+	    if (Gdx.input.isTouched()) { // Check when clicking
+	        System.out.println("Click detected at: (" + redc.getX() + ", " + redc.getY() + ")");
+	    }
+	    
+		collisionManager.checkCollisions();
 		em.render(batch);
 		redc.render(batch);
+		
+
 		
 	}
 	

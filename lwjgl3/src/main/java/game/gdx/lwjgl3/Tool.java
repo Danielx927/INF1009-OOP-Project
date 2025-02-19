@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Tool extends Entity {
+public class Tool extends Entity implements Collidable{
 	private Sprite sprite;
 	private float cooldown;
 	private boolean cdIsRunning;
 	private static final float CD_TIMER = 120;
 	
 	public Tool(String t, float x, float y) {
-		super(t, x, y);
+		
+		super(t, x, y, 30, 30);
 		this.cooldown = 0;
 		this.cdIsRunning = false;
 		this.setSprite(super.getTexture());
@@ -64,6 +65,14 @@ public class Tool extends Entity {
 		sprite.draw(batch);
 		batch.end();
 	}
+	
+	@Override
+    public void onCollision(Collidable other) {
+        System.out.println("Tool collided with: " + other);
+    }
+	
+	
+
 	
 }
 		
