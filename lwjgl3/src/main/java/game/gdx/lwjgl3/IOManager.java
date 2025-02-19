@@ -50,8 +50,12 @@ public class IOManager implements InputProcessor, Audio {
 	
 	public void populatePlaylist() {
 		Music starlings = this.newMusic(Gdx.files.internal("music/starlings.mp3"));
+		Music jungle = this.newMusic(Gdx.files.internal("music/jungle.mp3"));
+
 		
 		playlist.put("starlings", starlings);
+		playlist.put("jungle", jungle);
+
 
 	}
 	

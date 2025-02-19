@@ -49,7 +49,7 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
-		IOmgr.playMusic("starlings", true, 0.2f);
+		IOmgr.playMusic("jungle", true, 0.5f);
 
 		
 	}
