@@ -6,13 +6,12 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameMaster extends ApplicationAdapter{
 	private IOManager IOmgr;
-	public Tool redc;
+	private Tool tool;
 	
 	private SpriteBatch batch;
 	private EntityManager em;
@@ -26,9 +25,8 @@ public class GameMaster extends ApplicationAdapter{
 	@Override
 	public void create()
 	{
-		Gdx.graphics.setSystemCursor(SystemCursor.None);
-		redc = new Tool("sprites/red_circle.png", 100, 100);
-		IOmgr = new IOManager(redc);
+		tool = new Tool("sprites/red_circle.png", 100, 100);
+		IOmgr = new IOManager(tool);
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
 		em = new EntityManager();
@@ -51,6 +49,8 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
+		IOmgr.playMusic("starlings", true, 0.2f);
+
 		
 	}
 	
@@ -61,6 +61,7 @@ public class GameMaster extends ApplicationAdapter{
 		if (!tile.getOccupied()) {
 			InteractiveObject mole = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
 			em.addEntity(mole);
+			IOmgr.playSound("entitySpawn1", 1.0f);
 		}
 	}
 	
@@ -78,7 +79,7 @@ public class GameMaster extends ApplicationAdapter{
 		em.update(Gdx.graphics.getDeltaTime());
 		
 		em.render(batch);
-		redc.render(batch);
+		tool.render(batch);
 		
 	}
 	
