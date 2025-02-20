@@ -17,16 +17,16 @@ public interface Collidable {
         float bw = other.getWidth();
         float bh = other.getHeight();
 
-        System.out.println("\nBounding box check:");
-        System.out.println(" - This object: (" + ax + ", " + ay + "), w=" + aw + ", h=" + ah);
-        System.out.println(" - Other object: (" + bx + ", " + by + "), w=" + bw + ", h=" + bh);
+        //System.out.println("\nBounding box check:");
+        //System.out.println(" - This object: (" + ax + ", " + ay + "), w=" + aw + ", h=" + ah);
+        //System.out.println(" - Other object: (" + bx + ", " + by + "), w=" + bw + ", h=" + bh);
 
         boolean collision = ax < bx + bw &&
                             ax + aw > bx &&
                             ay < by + bh &&
                             ay + ah > by;
 
-        System.out.println("Collision result: " + collision);
+        //System.out.println("Collision result: " + collision);
         return collision;
     }
 

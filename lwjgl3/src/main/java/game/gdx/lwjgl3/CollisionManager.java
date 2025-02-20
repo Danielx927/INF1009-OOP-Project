@@ -14,27 +14,28 @@ public class CollisionManager {
 
     public void checkCollisions() {
         if (!Gdx.input.justTouched()) { 
-            return; // ✅ Only check for collisions when a new click is detected
+            return; // ✅ Only check for collisions on the first frame of a click
         }
 
         List<Collidable> objectsThatCollided = new ArrayList<>();
 
         for (int i = 0; i < collidables.size(); i++) {
-            for (int j = 0; j < collidables.size(); j++) {
-                Collidable a = collidables.get(i);
-                Collidable b = collidables.get(j);
+            Collidable a = collidables.get(i);
 
-                if (a == null || b == null || a == b) continue;
+            if (a instanceof Tool) { // ✅ Only check collisions from Tool's perspective
+                for (int j = 0; j < collidables.size(); j++) {
+                    Collidable b = collidables.get(j);
 
-                if ((a instanceof Tool && b instanceof InteractiveObject) || (a instanceof InteractiveObject && b instanceof Tool)) {
-                    System.out.println("Click collision check: " + a + " vs " + b);
+                    if (b instanceof InteractiveObject) { 
+                        //System.out.println("Click collision check: " + a + " vs " + b);
 
-                    if (a.collidesWith(b)) {
-                        System.out.println("✅ CLICK COLLISION DETECTED: " + a + " with " + b);
-                        a.onCollision(b);
-                        b.onCollision(a);
-                        objectsThatCollided.add(a);
-                        objectsThatCollided.add(b);
+                        if (a.collidesWith(b)) {
+                            //System.out.println("✅ CLICK COLLISION DETECTED: " + a + " with " + b);
+                            a.onCollision(b); // Notify Tool
+                            b.onCollision(a); // Notify InteractiveObject
+                            objectsThatCollided.add(a);
+                            objectsThatCollided.add(b);
+                        }
                     }
                 }
             }
@@ -47,6 +48,7 @@ public class CollisionManager {
             }
         }
     }
+
 
 
 

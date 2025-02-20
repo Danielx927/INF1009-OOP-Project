@@ -25,10 +25,12 @@ public class GameMaster extends ApplicationAdapter{
 	public void create()
 	{
 
-		tool = new Tool("sprites/red_circle.png", 100, 100);
+		tool = new Tool("sprites/red_circle2.png", 100, 100);
         collisionManager = new CollisionManager(new ArrayList<>());
         collisionManager.addCollidable(tool); // Add the Tool (red circle)
-		IOmgr = new IOManager(tool);
+        new IOManager();
+		IOmgr = IOManager.getInstance();
+		IOmgr.addTool(tool);
 
 		Gdx.input.setInputProcessor(IOmgr);
 		batch = new SpriteBatch();
@@ -52,6 +54,7 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
+		em.addEntity(tool);
 		IOmgr.playMusic("jungle", true, 0.5f);
 
 		
@@ -79,20 +82,10 @@ public class GameMaster extends ApplicationAdapter{
 			spawnTimer = 0;
 		}
 		
-		em.update(Gdx.graphics.getDeltaTime());
-		// Update Tool position to match mouse cursor
-	    tool.setX(Gdx.input.getX());
-	    tool.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
-	    if (Gdx.input.isTouched()) { // Check when clicking
-	        System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
-	    }
-	    
+		em.update(Gdx.graphics.getDeltaTime());	    
 		collisionManager.checkCollisions();
 		em.render(batch);
-		tool.render(batch);
-		
-
-		
+				
 	}
 	
 	@Override
