@@ -11,7 +11,7 @@ public class Tool extends Entity implements Collidable{
 	private Sprite sprite;
 	private float cooldown;
 	private boolean cdIsRunning;
-	private static final float CD_TIMER = 120;
+	private static final float CD_TIMER = 60;
 	private static final Vector2 OFFSET = new Vector2(-60, Gdx.graphics.getHeight() - 70);
 	
 	public Tool(String t, float x, float y) {
@@ -47,15 +47,16 @@ public class Tool extends Entity implements Collidable{
 		if (this.cdIsRunning == false) {
 			this.cooldown = CD_TIMER;
 			this.cdIsRunning = true;
-			this.sprite.setColor(Color.WHITE);
-			this.sprite.setAlpha((float) 0.5);
-			//System.out.println("start");
-			IOManager.getInstance().playSound("generic1", 0.3f);
+			this.sprite.setAlpha((float) 1);
 		}
 		else {
 			this.sprite.setColor(Color.WHITE);
 			this.sprite.setAlpha((float) 0.5);
 		}
+		
+		this.sprite.setColor(Color.WHITE);
+		this.sprite.setAlpha((float) 0.5);
+		IOManager.getInstance().playSound("generic1", 0.3f);
 	}
 	
 	@Override
@@ -69,7 +70,6 @@ public class Tool extends Entity implements Collidable{
 				this.sprite.setAlpha((float) 1);
 			}
 		}
-		
 		sprite.draw(batch);
 
 	}

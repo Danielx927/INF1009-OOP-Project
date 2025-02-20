@@ -92,7 +92,6 @@ public class IOManager implements InputProcessor, Audio {
 		if (button != Input.Buttons.LEFT || pointer > 0) return false;
 		
 		tool.setCoords(screenX, screenY);
-		this.mouseMoved(screenX, screenY);
 		tool.clickEvent();		
 		return true;
 	}
