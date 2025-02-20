@@ -18,7 +18,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;
-	private Vector2 touchPos;
 	private HashMap<String, Sound> soundEffects;
 	private HashMap<String, Music> playlist;
 	private Music currentTrack;
@@ -26,9 +25,7 @@ public class IOManager implements InputProcessor, Audio {
 	private SpriteBatch batch;
 
     public IOManager() {
-		
     	batch = new SpriteBatch();
-    	touchPos = new Vector2();
     	soundEffects = new HashMap<String, Sound>();
     	playlist = new HashMap<String, Music>();
 
@@ -71,7 +68,6 @@ public class IOManager implements InputProcessor, Audio {
 	public void playHitSound() {
 	    playSound("entityCollide1", 0.5f);  // ✅ Play hit sound at 50% volume
 	}
-	
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -95,19 +91,16 @@ public class IOManager implements InputProcessor, Audio {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button != Input.Buttons.LEFT || pointer > 0) return false;
 		
-        touchPos.set(screenX, screenY);
-		tool.clickEvent();
-		if (tool.getCooldown() == tool.getCDTimer()) { // Sound only plays off cd
-			this.playSound("generic1", 0.3f);
-		}
-		
+		tool.setCoords(screenX, screenY);
+		this.mouseMoved(screenX, screenY);
+		tool.clickEvent();		
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		tool.setCoords(screenX, screenY);
+		return true;
 	}
 
 	@Override
@@ -118,8 +111,8 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
+		tool.setCoords(screenX, screenY);
+		return true;
 	}
 
 	@Override

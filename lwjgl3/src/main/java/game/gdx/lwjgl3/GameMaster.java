@@ -82,7 +82,7 @@ public class GameMaster extends ApplicationAdapter{
 			spawnTimer = 0;
 		}
 		
-		em.update(Gdx.graphics.getDeltaTime());	    
+		em.update(Gdx.graphics.getDeltaTime());
 		collisionManager.checkCollisions();
 		em.render(batch);
 				

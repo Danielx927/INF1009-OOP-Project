@@ -1,5 +1,6 @@
 package game.gdx.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,10 +12,9 @@ public class Tool extends Entity implements Collidable{
 	private float cooldown;
 	private boolean cdIsRunning;
 	private static final float CD_TIMER = 120;
-	private static final Vector2 OFFSET = new Vector2(-60,410);
+	private static final Vector2 OFFSET = new Vector2(-60, Gdx.graphics.getHeight() - 70);
 	
 	public Tool(String t, float x, float y) {
-		
 		super(t, x, y, 128, 128);
 		this.cooldown = 0;
 		this.cdIsRunning = false;
@@ -22,8 +22,8 @@ public class Tool extends Entity implements Collidable{
 	}
 	
 	public void setCoords(int X, int Y) {
-		super.setX(X);
-		super.setY(Y);
+		super.setX(X + OFFSET.x);
+		super.setY(-Y + OFFSET.y);
 		this.sprite.setPosition(X + OFFSET.x, -Y + OFFSET.y);
 	}
 	
@@ -50,6 +50,7 @@ public class Tool extends Entity implements Collidable{
 			this.sprite.setColor(Color.WHITE);
 			this.sprite.setAlpha((float) 0.5);
 			//System.out.println("start");
+			IOManager.getInstance().playSound("generic1", 0.3f);
 		}
 		else {
 			this.sprite.setColor(Color.WHITE);
@@ -69,9 +70,8 @@ public class Tool extends Entity implements Collidable{
 			}
 		}
 		
-//		batch.begin();
 		sprite.draw(batch);
-//		batch.end();
+
 	}
 	
 	@Override
