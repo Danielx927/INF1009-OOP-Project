@@ -13,8 +13,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;
@@ -22,16 +20,13 @@ public class IOManager implements InputProcessor, Audio {
 	private HashMap<String, Music> playlist;
 	private Music currentTrack;
     private Tool tool;
-	private SpriteBatch batch;
 
     public IOManager() {
-    	batch = new SpriteBatch();
     	soundEffects = new HashMap<String, Sound>();
     	playlist = new HashMap<String, Music>();
 
     	this.populateSfxList();
     	this.populatePlaylist();
-    	
     }
     
     public static IOManager getInstance() {
@@ -152,6 +147,7 @@ public class IOManager implements InputProcessor, Audio {
         }
 	}
 	
+	// This playMusic function is for starting a new track.
 	public void playMusic(String key, Boolean looping, float vol) {
 		if (currentTrack != null) currentTrack.stop();
 		try {
@@ -162,6 +158,33 @@ public class IOManager implements InputProcessor, Audio {
 		}
 		catch (NullPointerException e) {
             System.out.print("NullPointerException: Ensure the key exists in the playlist HashMap.\n");
+		}
+	}
+	
+	// This playMusic function is for resuming the current track.
+	public void playMusic() {
+		if (currentTrack != null) currentTrack.play();
+	}
+	
+	public boolean isCurrentlyPlaying() {
+		try {
+			if (currentTrack.isPlaying()) {
+				return true;
+			} 
+			return false;
+		} catch (NullPointerException e) {
+			return false;
+		}
+	}
+	
+	public void pauseMusic() {
+		currentTrack.pause();
+	}
+	
+	public void stopMusic() {
+		if (currentTrack != null) {
+			currentTrack.stop();
+			currentTrack = null;
 		}
 	}
 
@@ -188,7 +211,5 @@ public class IOManager implements InputProcessor, Audio {
 		
 		for (Map.Entry<String, Music> item : playlist.entrySet())
 			playlist.get(item.getKey()).dispose();
-		
-		batch.dispose();
 	}
 }
