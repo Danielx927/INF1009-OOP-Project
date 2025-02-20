@@ -42,6 +42,7 @@ public class InteractiveObject extends Entity implements Collidable{
         if (other instanceof Tool) { // Only remove on Tool collision
             System.out.println("✅ InteractiveObject at (" + getX() + ", " + getY() + ") hit by Tool! Removing InteractiveObject");
             lifeTime = maxLifeTime; // ✅ Mark object as expired (removal handled in EntityManager)
+            IOManager.getInstance().playHitSound();
         }
     }
 

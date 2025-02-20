@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
+	private static IOManager instance;
 	private Vector2 touchPos;
 	private HashMap<String, Sound> soundEffects;
 	private HashMap<String, Music> playlist;
@@ -24,10 +25,8 @@ public class IOManager implements InputProcessor, Audio {
     private Tool tool;
 	private SpriteBatch batch;
 
-
-    public IOManager(Tool tooll) {
-		Gdx.graphics.setSystemCursor(SystemCursor.None);
-    	tool = tooll;
+    public IOManager() {
+		
     	batch = new SpriteBatch();
     	touchPos = new Vector2();
     	soundEffects = new HashMap<String, Sound>();
@@ -38,28 +37,39 @@ public class IOManager implements InputProcessor, Audio {
     	
     }
     
-	public void populateSfxList() {
+    public static IOManager getInstance() {
+        if (instance == null) {
+            instance = new IOManager();
+        }
+        return instance;
+    }
+    
+    public void addTool(Tool tooll) {
+    	Gdx.graphics.setSystemCursor(SystemCursor.None);
+    	tool = tooll;
+    }
+    
+	private void populateSfxList() {
 		Sound sfx1 = this.newSound(Gdx.files.internal("sounds/sfx1.mp3"));
 		Sound entitySpawn1 = this.newSound(Gdx.files.internal("sounds/entity_spawn1.mp3"));
-		
-		soundEffects.put("generic1", sfx1);
-		soundEffects.put("entitySpawn1", entitySpawn1);
+		Sound entityCollide1 = this.newSound(Gdx.files.internal("sounds/entity_collide1.mp3"));
 
+		soundEffects.put("entityCollide1", entityCollide1);
+		soundEffects.put("entitySpawn1", entitySpawn1);
+		soundEffects.put("generic1", sfx1);
 	}
 	
-	public void populatePlaylist() {
+	private void populatePlaylist() {
 		Music starlings = this.newMusic(Gdx.files.internal("music/starlings.mp3"));
 		Music jungle = this.newMusic(Gdx.files.internal("music/jungle.mp3"));
 
 		
 		playlist.put("starlings", starlings);
 		playlist.put("jungle", jungle);
-
-
 	}
 	
 	public void playHitSound() {
-	    playSound("hit", 0.5f);  // ✅ Play hit sound at 50% volume
+	    playSound("entityCollide1", 0.5f);  // ✅ Play hit sound at 50% volume
 	}
 	
 
