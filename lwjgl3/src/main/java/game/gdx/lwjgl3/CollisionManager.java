@@ -40,7 +40,8 @@ public class CollisionManager {
                 }
             }
         }
-
+        // the collisionbox is update when onclick but when onclick the mousemove event doesnt fire which doesnt
+        // update the coords
         // Handle objects that did not collide
         for (Collidable obj : collidables) {
             if (!objectsThatCollided.contains(obj)) {

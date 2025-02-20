@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import game.gdx.lwjgl3.MainMenuScene;
 
 public class GameMaster extends ApplicationAdapter{
 	private IOManager IOmgr;
@@ -57,6 +58,10 @@ public class GameMaster extends ApplicationAdapter{
 		em.addEntity(tool);
 		IOmgr.playMusic("jungle", true, 0.5f);
 
+        SceneManager sceneManager = SceneManager.getInstance(this);
+		sceneManager.addScene(new MainMenuScene(this));
+		System.out.println("MainMenuScene added!");
+		sceneManager.changetoScene(MainMenuScene.class);
 		
 	}
 	
@@ -82,7 +87,7 @@ public class GameMaster extends ApplicationAdapter{
 			spawnTimer = 0;
 		}
 		
-		em.update(Gdx.graphics.getDeltaTime());	    
+		em.update(Gdx.graphics.getDeltaTime());
 		collisionManager.checkCollisions();
 		em.render(batch);
 				
