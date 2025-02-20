@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public abstract class Scene {
+public abstract class Scene implements Screen{
 	private Texture background;
 	private String name;
 	private List<Entity> entityList = new ArrayList<Entity>();
