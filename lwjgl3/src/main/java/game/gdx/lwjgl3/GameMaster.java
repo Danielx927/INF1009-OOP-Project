@@ -57,13 +57,13 @@ public class GameMaster extends ApplicationAdapter{
 		
 	}
 	
-	private void spawnMole() {
+	private void spawnIO() {
 		int col_index = (int) (Math.random() * grid[0].length);
 		int row_index = (int) (Math.random() * grid.length);
 		GameTile tile = grid[row_index][col_index];
 		if (!tile.getOccupied()) {
-			InteractiveObject mole = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
-			em.addEntity(mole);
+			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
+			em.addEntity(io);
 			IOmgr.playSound("entitySpawn1", 1.0f);
 		}
 	}
@@ -75,7 +75,7 @@ public class GameMaster extends ApplicationAdapter{
 	
 		spawnTimer += Gdx.graphics.getDeltaTime();
 		if (spawnTimer >= spawnInterval) {
-			spawnMole();
+			spawnIO();
 			spawnTimer = 0;
 		}
 		
