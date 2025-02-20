@@ -59,6 +59,10 @@ public class IOManager implements InputProcessor, Audio {
 
 	}
 	
+	public void playHitSound() {
+	    playSound("hit", 0.5f);  // ✅ Play hit sound at 50% volume
+	}
+	
 
 	@Override
 	public boolean keyDown(int keycode) {

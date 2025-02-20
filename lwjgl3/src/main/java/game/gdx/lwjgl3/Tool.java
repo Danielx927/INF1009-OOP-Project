@@ -68,7 +68,7 @@ public class Tool extends Entity implements Collidable{
 	
 	@Override
     public void onCollision(Collidable other) {
-        System.out.println("Tool collided with: " + other);
+        System.out.println("✅Tool collided with: " + other);
     }
 	
 	

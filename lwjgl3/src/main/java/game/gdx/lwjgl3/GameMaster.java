@@ -84,7 +84,7 @@ public class GameMaster extends ApplicationAdapter{
 	    tool.setX(Gdx.input.getX());
 	    tool.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
 	    if (Gdx.input.isTouched()) { // Check when clicking
-	        System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
+	        //System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
 	    }
 	    
 		collisionManager.checkCollisions();

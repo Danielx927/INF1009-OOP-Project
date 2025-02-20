@@ -33,29 +33,21 @@ public class EntityManager {
 
 	
 	void update(float delta) {
-		
-		 List<Entity> molesToRemove = new ArrayList<>();
-		    
-		    for (Entity e : entityList) {
-		        if (e instanceof InteractiveObject) {
-		            InteractiveObject mole = (InteractiveObject) e;
+	    List<Entity> molesToRemove = new ArrayList<>();
 
+	    for (Entity e : entityList) {
+	        if (e instanceof InteractiveObject) {
+	            InteractiveObject obj = (InteractiveObject) e;
+	            if (!obj.isActive(delta)) { // ✅ Automatically removes objects with expired lifetime
+	                molesToRemove.add(obj);
+	            }
+	        }
+	    }
 
-		            // Remove if mole is inactive (expired) OR not visible (was clicked)
-		            if (!mole.isActive(delta) || !mole.getIsVisible()) {
-		                molesToRemove.add(mole);
-		            }
-		        }
-		    }
-
-		    // Remove from entity list
-		    entityList.removeAll(molesToRemove);
-
-		    // Also remove from CollisionManager
-		    for (Entity e : molesToRemove) {
-		        GameMaster.collisionManager.removeCollidable((Collidable) e);
-		    }
-
+	    entityList.removeAll(molesToRemove);
+	    for (Entity e : molesToRemove) {
+	        GameMaster.collisionManager.removeCollidable((Collidable) e);
+	    }
 	}
 
 	
