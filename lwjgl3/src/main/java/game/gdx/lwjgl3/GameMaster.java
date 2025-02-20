@@ -25,7 +25,7 @@ public class GameMaster extends ApplicationAdapter{
 	public void create()
 	{
 
-		tool = new Tool("sprites/red_circle.png", 100, 100);
+		tool = new Tool("sprites/red_circle2.png", 100, 100);
         collisionManager = new CollisionManager(new ArrayList<>());
         collisionManager.addCollidable(tool); // Add the Tool (red circle)
 		IOmgr = new IOManager(tool);
@@ -52,6 +52,7 @@ public class GameMaster extends ApplicationAdapter{
 				em.addEntity(grid[row][col]);
 			}
 		}
+		em.addEntity(tool);
 		IOmgr.playMusic("jungle", true, 0.5f);
 
 		
@@ -86,10 +87,14 @@ public class GameMaster extends ApplicationAdapter{
 	    if (Gdx.input.isTouched()) { // Check when clicking
 	        //System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
 	    }
+//	    tool.setX(Gdx.input.getX());
+//	    tool.setY(Gdx.graphics.getHeight() - Gdx.input.getY()); // Convert screen coordinates
+//	    if (Gdx.input.isTouched()) { // Check when clicking
+//	        System.out.println("Click detected at: (" + tool.getX() + ", " + tool.getY() + ")");
+//	    }
 	    
 		collisionManager.checkCollisions();
 		em.render(batch);
-		tool.render(batch);
 		
 
 		

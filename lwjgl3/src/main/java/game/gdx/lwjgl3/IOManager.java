@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class IOManager implements InputProcessor, Audio {
-	private Vector2 touchPos, offset;
+	private Vector2 touchPos;
 	private HashMap<String, Sound> soundEffects;
 	private HashMap<String, Music> playlist;
 	private Music currentTrack;
@@ -27,8 +27,7 @@ public class IOManager implements InputProcessor, Audio {
 
     public IOManager(Tool tooll) {
 		Gdx.graphics.setSystemCursor(SystemCursor.None);
-    	this.tool = tooll;
-    	offset = new Vector2(-60,410);
+    	tool = tooll;
     	batch = new SpriteBatch();
     	touchPos = new Vector2();
     	soundEffects = new HashMap<String, Sound>();
@@ -115,7 +114,7 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		tool.getSprite().setPosition(screenX + offset.x, -screenY + offset.y);
+		tool.setCoords(screenX, screenY);
 		return true;
 	}
 
