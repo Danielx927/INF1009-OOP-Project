@@ -61,7 +61,7 @@ public class MainMenuScene extends Scene implements Screen {
     public void load() {
         // UI setup
         stage = new Stage(new ScreenViewport());
-        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         // Buttons
         startButton = new TextButton("Start Game!", skin);
