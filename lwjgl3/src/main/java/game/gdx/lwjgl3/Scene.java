@@ -1,38 +1,53 @@
 package game.gdx.lwjgl3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public abstract class Scene implements Screen{
-	private Texture background;
-	private String name;
-	private List<Entity> entityList = new ArrayList<Entity>();
+public abstract class Scene implements Screen {
 	
-	//Initialize name and background
-	public Scene(String name) {
-		this.name = name;
+	protected GameMaster game;
+	protected Texture background;
+	protected SpriteBatch batch;
+	protected Stage stage;
+	protected Skin skin;
+	
+	public Scene(GameMaster game) {
+		this.game = game;
+		this.batch = game.batch;
+		
+		stage = new Stage(new ScreenViewport());
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+        
+        Gdx.input.setInputProcessor(stage);
 	}
 	
-	public abstract void load();
-	public abstract void unload();
+	public void show() {
+		Gdx.input.setCursorCatched(false);
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(stage);  // Handle UI interactions
+		multiplexer.addProcessor(GameMaster.IOmgr);  // Handle custom cursor and game controls
+		Gdx.input.setInputProcessor(multiplexer);
+		
+		setBackground("game.png");
+	};
+	public abstract void render(float delta);
+	public abstract void setBackground(String bgPath);
 	
-	public void setBackground(String bgPath) {
-		background = new Texture(Gdx.files.internal(bgPath));
+	public Texture getBackground() {
+		return background;
 	}
 	
-	public void drawBackground(SpriteBatch batch) {
-		batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	}
+	public void dispose() {
+		if (background != null) {
+			background.dispose();
+		}
+		stage.dispose();
+	};
 	
-    public void render(SpriteBatch batch) {
-        drawBackground(batch); // Draw the background as a default
-    }
-    
-    public void dispose() {
-    	background.dispose();
-    }
 }

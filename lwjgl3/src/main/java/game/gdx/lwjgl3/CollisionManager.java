@@ -61,4 +61,8 @@ public class CollisionManager {
     public void removeCollidable(Collidable c) {
         collidables.remove(c);
     }
+    
+    public void dispose() {
+    	collidables = null;
+    }
 }

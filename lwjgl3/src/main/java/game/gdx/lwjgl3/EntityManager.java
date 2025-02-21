@@ -12,7 +12,7 @@ public class EntityManager {
 		entityList = new ArrayList<>();
 	}
 	
-	void addEntity(Entity e) {
+	public void addEntity(Entity e) {
 	    if (e == null) return; // Prevent adding null entities
 	    entityList.add(e);
 	    
@@ -22,7 +22,7 @@ public class EntityManager {
 	}
 
 	
-	void removeEntity(Entity e) {
+	public void removeEntity(Entity e) {
 	    if (e == null) return; // Prevent null entity removal
 	    entityList.remove(e);
 	    
@@ -32,26 +32,26 @@ public class EntityManager {
 	}
 
 	
-	void update(float delta) {
-	    List<Entity> molesToRemove = new ArrayList<>();
+	public void update(float delta) {
+	    List<Entity> ioToRemove = new ArrayList<>();
 
 	    for (Entity e : entityList) {
 	        if (e instanceof InteractiveObject) {
 	            InteractiveObject obj = (InteractiveObject) e;
 	            if (!obj.isActive(delta)) { // ✅ Automatically removes objects with expired lifetime
-	                molesToRemove.add(obj);
+	                ioToRemove.add(obj);
 	            }
 	        }
 	    }
 
-	    entityList.removeAll(molesToRemove);
-	    for (Entity e : molesToRemove) {
+	    entityList.removeAll(ioToRemove);
+	    for (Entity e : ioToRemove) {
 	        GameMaster.collisionManager.removeCollidable((Collidable) e);
 	    }
 	}
 
 	
-	void render(SpriteBatch b) {
+	public void render(SpriteBatch b) {
 		Tool tool = null;
 		// Call draw methods for all entities.
 		// Ensures that if a Tool object is in the entityList, they are render last so that
@@ -67,5 +67,9 @@ public class EntityManager {
 			
 		
 		b.end();
+	}
+	
+	public void dispose() {
+		entityList = null;
 	}
 }
