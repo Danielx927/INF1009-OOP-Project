@@ -25,7 +25,6 @@ public class GameMaster extends Game{
 	    collisionManager = new CollisionManager(new ArrayList<>());
 	    em = new EntityManager();
         tool = new Tool("sprites/red_circle2.png", 100, 100);
-        collisionManager.addCollidable(tool); // Add the Tool (red circle)
         
         new IOManager();
         ioManager = IOManager.getInstance();
