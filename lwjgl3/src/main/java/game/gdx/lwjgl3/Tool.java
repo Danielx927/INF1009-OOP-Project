@@ -15,7 +15,7 @@ public class Tool extends Entity implements Collidable{
 	private static final Vector2 OFFSET = new Vector2(-60, Gdx.graphics.getHeight() - 70);
 	
 	public Tool(String t, float x, float y) {
-		super(t, x, y, 64f, 64f);
+		super(t, x, y, 128, 128);
 		this.cooldown = 0;
 		this.cdIsRunning = false;
 		this.setSprite(super.getTexture());
@@ -25,6 +25,7 @@ public class Tool extends Entity implements Collidable{
 		super.setX(X + OFFSET.x);
 		super.setY(-Y + OFFSET.y);
 		this.sprite.setPosition(X + OFFSET.x, -Y + OFFSET.y);
+
 	}
 	
 	public Sprite getSprite() {

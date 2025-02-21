@@ -39,6 +39,8 @@ public class IOManager implements InputProcessor, Audio {
     public void addTool(Tool tooll) {
     	Gdx.graphics.setSystemCursor(SystemCursor.None);
     	tool = tooll;
+//        System.out.println("Tool created:." + tool);
+
     }
     
 	private void populateSfxList() {
@@ -84,17 +86,23 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (button != Input.Buttons.LEFT || pointer > 0) return false;
-		
-		tool.setCoords(screenX, screenY);
-		tool.clickEvent();		
-		return true;
+		if (tool != null) {
+			if (button != Input.Buttons.LEFT || pointer > 0) return false;
+			
+			tool.setCoords(screenX, screenY);
+			tool.clickEvent();		
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		tool.setCoords(screenX, screenY);
-		return true;
+		if (tool != null) {
+			tool.setCoords(screenX, screenY);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -105,14 +113,20 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		tool.setCoords(screenX, screenY);
-		return true;
+		if (tool != null) {
+			tool.setCoords(screenX, screenY);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		tool.setCoords(screenX, screenY);
-		return true;
+		if (tool != null) {
+			tool.setCoords(screenX, screenY);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

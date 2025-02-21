@@ -10,7 +10,7 @@ public class GameMaster extends Game{
 	
 	protected SpriteBatch batch;
 	public static CollisionManager collisionManager;
-	public static IOManager IOmgr;
+	public static IOManager ioManager;
 	public static EntityManager em;
 	public static SceneManager sceneManager;
 	public Tool tool;
@@ -27,13 +27,14 @@ public class GameMaster extends Game{
         tool = new Tool("sprites/red_circle2.png", 100, 100);
         collisionManager.addCollidable(tool); // Add the Tool (red circle)
         
-        IOmgr = IOManager.getInstance();
-		IOmgr.addTool(tool);
-		Gdx.input.setInputProcessor(IOmgr);
+        new IOManager();
+        ioManager = IOManager.getInstance();
+        ioManager.addTool(tool);
+		Gdx.input.setInputProcessor(ioManager);
 		em.addEntity(tool);
 		
 	    batch = new SpriteBatch();
-		IOmgr.playMusic("jungle", true, 0.5f);
+	    ioManager.playMusic("jungle", true, 0.5f);
 		sceneManager = new SceneManager(this);
 		sceneManager.setScene(new MainMenuScene(this));
 		System.out.println(sceneManager.getGame());
@@ -56,7 +57,7 @@ public class GameMaster extends Game{
 		sceneManager.dispose();
 		collisionManager.dispose();
 		em.dispose();
-		IOmgr.dispose();
+		ioManager.dispose();
 		batch.dispose();
 	}
 }

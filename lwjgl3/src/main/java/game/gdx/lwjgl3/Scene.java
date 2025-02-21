@@ -28,10 +28,10 @@ public abstract class Scene implements Screen {
 	}
 	
 	public void show() {
-		Gdx.input.setCursorCatched(false);
+		Gdx.input.setCursorCatched(true);
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);  // Handle UI interactions
-		multiplexer.addProcessor(GameMaster.IOmgr);  // Handle custom cursor and game controls
+		multiplexer.addProcessor(GameMaster.ioManager);  // Handle custom cursor and game controls
 		Gdx.input.setInputProcessor(multiplexer);
 		
 		setBackground("game.png");

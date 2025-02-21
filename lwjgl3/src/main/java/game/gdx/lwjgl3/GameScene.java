@@ -3,6 +3,7 @@ package game.gdx.lwjgl3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -76,7 +77,7 @@ public class GameScene extends Scene {
 		if (!tile.getOccupied()) {
 			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
 			em.addEntity(io);
-			GameMaster.IOmgr.playSound("entitySpawn1", 1.0f);
+			GameMaster.ioManager.playSound("entitySpawn1", 1.0f);
 		}
 	}
 
@@ -103,11 +104,11 @@ public class GameScene extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 isPaused = false; // Resume the game
-                Gdx.input.setCursorCatched(false);  
+                Gdx.input.setCursorCatched(true);  
         		
         		InputMultiplexer multiplexer = new InputMultiplexer();
         		multiplexer.addProcessor(stage);  // Handle UI interactions
-        		multiplexer.addProcessor(GameMaster.IOmgr);  // Handle custom cursor and game controls
+        		multiplexer.addProcessor(GameMaster.ioManager);  // Handle custom cursor and game controls
         		Gdx.input.setInputProcessor(multiplexer);
             }
         });
@@ -133,7 +134,7 @@ public class GameScene extends Scene {
         // Set the pause stage as the input processor
         InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(pauseMenu);  
-		multiplexer.addProcessor(GameMaster.IOmgr); 
+		multiplexer.addProcessor(GameMaster.ioManager); 
 		Gdx.input.setInputProcessor(multiplexer);
 	}
 
