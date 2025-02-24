@@ -30,11 +30,22 @@ public class InteractiveObject extends Entity implements Collidable{
 	void setPoints(int p) {
 		points = p;
 	}
-	
 
 	@Override
 	public void render(SpriteBatch b) {
-		b.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+//		System.out.println(super.getCurrentAnim());
+		if (super.getCurrentAnim() != null) {
+			if(super.getCurrentAnim().isAnimationFinished()) { 
+				this.setCurrentAnimFinished();
+				b.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+			}
+			else {
+				super.getCurrentAnim().render(b, this, false);
+			}
+		}
+		else {
+			b.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		}
 	}
 	
 	@Override

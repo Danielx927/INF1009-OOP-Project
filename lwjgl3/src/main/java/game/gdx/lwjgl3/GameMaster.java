@@ -11,6 +11,7 @@ public class GameMaster extends Game{
 	protected SpriteBatch batch;
 	public static CollisionManager collisionManager;
 	public static IOManager ioManager;
+	public static AnimManager animManager;
 	public static EntityManager em;
 	public static SceneManager sceneManager;
 	public Tool tool;
@@ -31,6 +32,9 @@ public class GameMaster extends Game{
         ioManager.addTool(tool);
 		Gdx.input.setInputProcessor(ioManager);
 		em.addEntity(tool);
+		
+		new AnimManager();
+        animManager = AnimManager.getInstance();
 		
 	    batch = new SpriteBatch();
 	    ioManager.playMusic("jungle", true, 0.5f);
@@ -57,6 +61,7 @@ public class GameMaster extends Game{
 		collisionManager.dispose();
 		em.dispose();
 		ioManager.dispose();
+		animManager.dispose();
 		batch.dispose();
 	}
 }

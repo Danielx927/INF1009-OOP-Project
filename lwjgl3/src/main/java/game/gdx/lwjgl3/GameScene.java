@@ -28,7 +28,7 @@ public class GameScene extends Scene {
 		this.game = game;
 		this.em = new EntityManager();
         this.generateGrid();
-        
+    
         pauseMenu = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json")); // Load the default skin
 
@@ -77,6 +77,9 @@ public class GameScene extends Scene {
 			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10, 60, 60, 20, 2f);
 			em.addEntity(io);
 			GameMaster.ioManager.playSound("entitySpawn1", 1.0f);
+			GameMaster.animManager.useTemplate(io, "mole_template");
+			io.setCurrentAnim("mole_popup");
+
 		}
 	}
 
