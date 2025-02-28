@@ -11,7 +11,6 @@ public class SpriteAnimation {
 	private static final float FRAME_INTERVAL = 0.05f;
 	private Animation<TextureRegion> anim;
 	private Texture sheet;
-	private SpriteBatch spr;
 	private int emptyFramesOffset;
 	
 	float stateTime;
@@ -22,7 +21,6 @@ public class SpriteAnimation {
 	}
 	
 	public SpriteAnimation(FileHandle fileHandle, int cols, int rows, int offset) {
-		spr = new SpriteBatch();
 		sheet = new Texture(fileHandle);
 		emptyFramesOffset = offset + 1;
 		
@@ -74,7 +72,6 @@ public class SpriteAnimation {
 
 	
 	public void dispose() {
-		spr.dispose();
 		sheet.dispose();
 	}
 		
