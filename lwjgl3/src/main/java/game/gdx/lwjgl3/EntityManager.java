@@ -54,7 +54,7 @@ public class EntityManager {
 	public void render(SpriteBatch b) {
 		Tool tool = null;
 		// Call draw methods for all entities.
-		// Ensures that if a Tool object is in the entityList, they are render last so that
+		// Ensures that if a Tool object is in the entityList, they are rendered last so that
 		// it is drawn above all the other entities.
 		b.begin();
 		for (Entity e : entityList) {
