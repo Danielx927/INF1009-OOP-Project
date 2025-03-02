@@ -23,15 +23,23 @@ public class AnimManager {
     
     private void populateAnimHashMap() {
     	HashMap<String, SpriteAnimation> mole_template = new HashMap<String, SpriteAnimation>();
-    	SpriteAnimation mole_popup = new SpriteAnimation(Gdx.files.internal("spritesheets/mole_popup.png"), 3, 3, 2);
-    	SpriteAnimation mole_die = new SpriteAnimation(Gdx.files.internal("spritesheets/mole_die.png"), 3, 3, 2);
+    	SpriteAnimation mole_popup = new SpriteAnimation(Gdx.files.internal("spritesheets/mole_popup.png"), 3, 3, 2, 0.05f);
+    	SpriteAnimation mole_die = new SpriteAnimation(Gdx.files.internal("spritesheets/mole_die.png"), 3, 3, 2, 0.05f);
 
+    	HashMap<String, SpriteAnimation> hammer_template = new HashMap<String, SpriteAnimation>();
+    	SpriteAnimation hammer_slam = new SpriteAnimation(Gdx.files.internal("spritesheets/hammer_slam.png"), 3, 2, 1, 0.15f);
+
+    	
     	// Putting animations into their template
     	mole_template.put("mole_popup", mole_popup);
     	mole_template.put("mole_die", mole_die);
+    	
+    	hammer_template.put("hammer_slam", hammer_slam);
 
     	// Putting templates into the whole hashmap
     	animHashMap.put("mole_template", mole_template);
+    	animHashMap.put("hammer_template", hammer_template);
+
 
     }
     

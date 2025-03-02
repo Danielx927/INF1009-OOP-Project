@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class SpriteAnimation {
-	private static final float FRAME_INTERVAL = 0.05f;
+//	private float frameInterval;
 	private Animation<TextureRegion> anim;
 	private Texture sheet;
 	private int emptyFramesOffset;
@@ -20,7 +20,7 @@ public class SpriteAnimation {
 		this.anim = anim;
 	}
 	
-	public SpriteAnimation(FileHandle fileHandle, int cols, int rows, int offset) {
+	public SpriteAnimation(FileHandle fileHandle, int cols, int rows, int offset, float frameInterval) {
 		sheet = new Texture(fileHandle);
 		emptyFramesOffset = offset + 1;
 		
@@ -36,7 +36,7 @@ public class SpriteAnimation {
 			}
 		}
 		
-		anim = new Animation<TextureRegion>(FRAME_INTERVAL, frames); 
+		anim = new Animation<TextureRegion>(frameInterval, frames); 
 		stateTime = 0f;
 		
 	}
@@ -49,16 +49,6 @@ public class SpriteAnimation {
 		return emptyFramesOffset;
 	}
 	
-	public void render(SpriteBatch b, Entity e, boolean looping) {
-		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-		
-		// Get current frame of animation for the current stateTime
-		TextureRegion currentFrame = anim.getKeyFrame(stateTime, looping);
-//		b.draw(currentFrame, e.getX() - e.getWidth()/2, e.getY() - e.getHeight()/2);
-		b.draw(currentFrame, e.getX(), e.getY(), e.getWidth(), e.getHeight());
-
-	}
-	
 	public boolean isAnimationFinished() {
 //		System.out.print("\n");
 //		System.out.print("Keyframe Index: " + anim.getKeyFrameIndex(stateTime));
@@ -69,6 +59,24 @@ public class SpriteAnimation {
 		}
 		return false;
 	}
+	
+	public void reset() {
+	    stateTime = 0;
+	}
+	
+	public void render(SpriteBatch b, Entity e, boolean looping) {
+		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+		
+		// Get current frame of animation for the current stateTime
+		TextureRegion currentFrame = anim.getKeyFrame(stateTime, looping);
+//		b.draw(currentFrame, e.getX() - e.getWidth()/2, e.getY() - e.getHeight()/2);
+//		System.out.println("Frame Width: " + currentFrame.getRegionWidth() + " | Expected: " + e.getWidth());
+//		System.out.println("Frame Height: " + currentFrame.getRegionHeight() + " | Expected: " + e.getHeight());
+//		
+		b.draw(currentFrame, e.getX(), e.getY(), e.getWidth(), e.getHeight());
+
+	}
+
 
 	
 	public void dispose() {

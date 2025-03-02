@@ -25,7 +25,7 @@ public class GameMaster extends Game{
 	    sceneManager = new SceneManager(this);
 	    collisionManager = new CollisionManager(new ArrayList<>());
 	    em = new EntityManager();
-        tool = new Tool("sprites/red_circle2.png", 100, 100);
+        tool = new Tool("sprites/hammer.png", 100, 100);
         
         new IOManager();
         ioManager = IOManager.getInstance();
@@ -35,6 +35,7 @@ public class GameMaster extends Game{
 		
 		new AnimManager();
         animManager = AnimManager.getInstance();
+        animManager.useTemplate(tool, "hammer_template");
 		
 	    batch = new SpriteBatch();
 	    ioManager.playMusic("jungle", true, 0.5f);

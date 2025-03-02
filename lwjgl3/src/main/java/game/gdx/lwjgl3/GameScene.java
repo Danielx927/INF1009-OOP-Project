@@ -106,7 +106,7 @@ public class GameScene extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 isPaused = false; // Resume the game
-                Gdx.input.setCursorCatched(true);  
+                Gdx.input.setCursorCatched(false);  
         		
         		InputMultiplexer multiplexer = new InputMultiplexer();
         		multiplexer.addProcessor(stage);  // Handle UI interactions
