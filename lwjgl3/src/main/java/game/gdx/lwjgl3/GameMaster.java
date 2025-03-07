@@ -38,7 +38,7 @@ public class GameMaster extends Game{
         animManager.useTemplate(tool, "hammer_template");
 		
 	    batch = new SpriteBatch();
-	    ioManager.playMusic("jungle", true, 0.5f);
+//	    ioManager.playMusic("jungle", true, 0.5f);
 		sceneManager = new SceneManager(this);
 		sceneManager.setScene(new MainMenuScene(this));
 		System.out.println(sceneManager.getGame());

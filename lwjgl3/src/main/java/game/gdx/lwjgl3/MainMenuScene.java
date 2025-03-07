@@ -13,6 +13,7 @@ public class MainMenuScene extends Scene {
 	public MainMenuScene(GameMaster game) {
 		super(game);
 		this.game = game;
+		GameMaster.ioManager.playMusic("main-menu", true, 0.2f);	
 		
 		TextButton startButton = new TextButton("Start Game!", skin);
 		startButton.setColor(Color.YELLOW);

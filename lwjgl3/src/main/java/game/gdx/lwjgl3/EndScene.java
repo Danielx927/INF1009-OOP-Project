@@ -15,6 +15,9 @@ public class EndScene extends Scene {
 		super(game);
 		this.game = game;
 		
+		// PH for now, change to something else later.
+		GameMaster.ioManager.playMusic("starlings", true, 0.2f);
+		
 		TextButton playButton = new TextButton("Play again", skin);
 		playButton.setColor(Color.YELLOW);
 		TextButton mainMenuButton = new TextButton("Main Menu", skin);
