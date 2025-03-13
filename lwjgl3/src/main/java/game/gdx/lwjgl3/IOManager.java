@@ -47,19 +47,23 @@ public class IOManager implements InputProcessor, Audio {
 		Sound sfx1 = this.newSound(Gdx.files.internal("sounds/sfx1.mp3"));
 		Sound entitySpawn1 = this.newSound(Gdx.files.internal("sounds/entity_spawn1.mp3"));
 		Sound entityCollide1 = this.newSound(Gdx.files.internal("sounds/entity_collide1.mp3"));
+		Sound damageTaken1 = this.newSound(Gdx.files.internal("sounds/damage_taken1.mp3"));
 
-		soundEffects.put("entityCollide1", entityCollide1);
-		soundEffects.put("entitySpawn1", entitySpawn1);
-		soundEffects.put("generic1", sfx1);
+		soundEffects.put("damageTaken1", damageTaken1); // yet to be used
+		soundEffects.put("entityCollide1", entityCollide1); // mole squish
+		soundEffects.put("entitySpawn1", entitySpawn1); // mole pop up
+		soundEffects.put("generic1", sfx1); // hammer hit sound
 	}
 	
 	private void populatePlaylist() {
 		Music starlings = this.newMusic(Gdx.files.internal("music/starlings.mp3"));
 		Music jungle = this.newMusic(Gdx.files.internal("music/jungle.mp3"));
+		Music mainMenu = this.newMusic(Gdx.files.internal("music/main-menu.mp3"));
 
-		
 		playlist.put("starlings", starlings);
-		playlist.put("jungle", jungle);
+		playlist.put("jungle", jungle); // game bg music
+		playlist.put("main-menu", mainMenu);
+
 	}
 	
 	public void playHitSound() {
