@@ -52,6 +52,7 @@ public class GameMaster extends Game{
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
 		em.render(batch);
+		ioManager.handleInputs();
 
 	}
 	

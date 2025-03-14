@@ -1,6 +1,8 @@
 package game.gdx.lwjgl3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Audio;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;
+	private List<InputEvent> inputList;
 	private HashMap<String, Sound> soundEffects;
 	private HashMap<String, Music> playlist;
 	private Music currentTrack;
@@ -24,6 +27,7 @@ public class IOManager implements InputProcessor, Audio {
     public IOManager() {
     	soundEffects = new HashMap<String, Sound>();
     	playlist = new HashMap<String, Music>();
+    	inputList = new ArrayList<InputEvent>();
 
     	this.populateSfxList();
     	this.populatePlaylist();
@@ -41,6 +45,10 @@ public class IOManager implements InputProcessor, Audio {
     	tool = tooll;
 //        System.out.println("Tool created:." + tool);
 
+    }
+    
+    public void addInputEvent(InputEvent IE) {
+    	inputList.add(IE);
     }
     
 	private void populateSfxList() {
@@ -90,53 +98,72 @@ public class IOManager implements InputProcessor, Audio {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (tool != null) {
-			if (button != Input.Buttons.LEFT || pointer > 0) return false;
-			
-			tool.setCoords(screenX, screenY);
-			tool.clickEvent();		
-			return true;
-		}
+		InputEvent ie = new InputEvent();
+		ie.touchDown(screenX, screenY, pointer, button);
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (tool != null) {
-			tool.setCoords(screenX, screenY);
-			return true;
-		}
+		InputEvent ie = new InputEvent();
+		ie.touchUp(screenX, screenY, pointer, button);
 		return false;
 	}
 
 	@Override
 	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		InputEvent ie = new InputEvent();
+		ie.touchCancelled(screenX, screenY, pointer, button);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if (tool != null) {
-			tool.setCoords(screenX, screenY);
-			return true;
-		}
+		InputEvent ie = new InputEvent();
+		ie.touchDragged(screenX, screenY, pointer);
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		if (tool != null) {
-			tool.setCoords(screenX, screenY);
-			return true;
-		}
+		InputEvent ie = new InputEvent();
+		ie.mouseMoved(screenX, screenY);
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
-		// TODO Auto-generated method stub
+		InputEvent ie = new InputEvent();
+		ie.scrolled(amountX, amountY);
 		return false;
+	}
+	
+	public void handleInputs() {
+        for (int i = 0; i < inputList.size(); i++) {
+        	InputEvent input = inputList.get(i);
+        	switch(input.getInputType()) {
+			case 0: // Keyboard event
+				// No keyboard events...
+				break;
+			case 1: // Mouse move event
+				if (tool != null) {
+					tool.setCoords(input.xPos, input.yPos);
+				}
+				break;
+			case 2: // Mouse click event
+				if (tool != null) {
+					tool.setCoords(input.xPos, input.yPos);
+					tool.clickEvent();
+				}
+				break;
+			case 3: // Mouse scroll
+				// No scroll events...
+				break;
+			}
+        	// Deletes the element from the list.
+			inputList.remove(i);
+			i--;
+        }
 	}
 
 	@Override
@@ -229,5 +256,7 @@ public class IOManager implements InputProcessor, Audio {
 		
 		for (Map.Entry<String, Music> item : playlist.entrySet())
 			playlist.get(item.getKey()).dispose();
+		
+		inputList = null;
 	}
 }
