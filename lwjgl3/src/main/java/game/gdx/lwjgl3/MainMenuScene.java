@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MainMenuScene extends Scene {
 	protected GameMaster game;
@@ -13,22 +16,29 @@ public class MainMenuScene extends Scene {
 	public MainMenuScene(GameMaster game) {
 		super(game);
 		this.game = game;
-		GameMaster.ioManager.playMusic("main-menu", true, 0.2f);	
+		GameMaster.ioManager.playMusic("main-menu", true, 0.2f);
+        
+		//Add Textures for the button
+		Texture playTexture = new Texture(Gdx.files.internal("play_button.png"));
+		Texture playHoverTexture = new Texture(Gdx.files.internal("play_button_hover.png"));
+		Texture quitTexture = new Texture(Gdx.files.internal("quit_button.png"));
+		Texture quitHoverTexture = new Texture(Gdx.files.internal("quit_button_hover.png"));
 		
-		TextButton startButton = new TextButton("Start Game!", skin);
-		startButton.setColor(Color.YELLOW);
-		TextButton quitButton = new TextButton("Quit", skin);
-		quitButton.setColor(Color.RED);
-        startButton.setSize(200, 50); // Set button size
-        quitButton.setSize(200, 50); // Set button size
-        startButton.setPosition(
-            (Gdx.graphics.getWidth() - startButton.getWidth()) / 2, // Center horizontally
-            (Gdx.graphics.getHeight() - startButton.getHeight()) / 2 // Center vertically
-        );
-        quitButton.setPosition(
-                (Gdx.graphics.getWidth() - startButton.getWidth()) / 2, // Center horizontally
-                (Gdx.graphics.getHeight() - startButton.getHeight()) / 2 - startButton.getHeight() - 10// Center vertically
-            );
+		ImageButton.ImageButtonStyle startButtonStyle = new ImageButton.ImageButtonStyle();
+		startButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playTexture));
+		startButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(playHoverTexture));
+		
+		ImageButton startButton = new ImageButton(startButtonStyle);
+		startButton.setSize(200, 70);
+		startButton.setPosition(465, 165);
+		
+		ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
+		quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
+		quitButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(quitHoverTexture));
+		
+		ImageButton quitButton = new ImageButton(quitButtonStyle);
+		quitButton.setSize(200, 70);
+		quitButton.setPosition(465, 90);
         
         startButton.addListener(new ClickListener() {
             @Override
