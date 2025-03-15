@@ -30,7 +30,7 @@ public class MainMenuScene extends Scene {
 		
 		ImageButton startButton = new ImageButton(startButtonStyle);
 		startButton.setSize(200, 70);
-		startButton.setPosition(465, 165);
+		startButton.setPosition(467, 165);
 		
 		ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
 		quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
