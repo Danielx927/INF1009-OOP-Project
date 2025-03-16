@@ -27,7 +27,7 @@ public class AnimManager {
     	SpriteAnimation mole_die = new SpriteAnimation(Gdx.files.internal("spritesheets/mole_die.png"), 3, 3, 2, 0.05f);
 
     	HashMap<String, SpriteAnimation> hammer_template = new HashMap<String, SpriteAnimation>();
-    	SpriteAnimation hammer_slam = new SpriteAnimation(Gdx.files.internal("spritesheets/hammer_slam.png"), 3, 2, 1, 0.15f);
+    	SpriteAnimation hammer_slam = new SpriteAnimation(Gdx.files.internal("spritesheets/hammer_slam.png"), 3, 2, 1, 0.07f);
 
     	
     	// Putting animations into their template
