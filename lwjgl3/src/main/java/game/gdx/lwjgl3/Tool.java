@@ -11,7 +11,7 @@ public class Tool extends Entity implements Collidable {
     private Sprite sprite;
     private float cooldown;
     private static final float CD_TIMER = 60;
-    private static final Vector2 OFFSET = new Vector2(-60, Gdx.graphics.getHeight() - 70);
+    private static final Vector2 OFFSET = new Vector2(-70, Gdx.graphics.getHeight() - 60);
     private Body body;
 
     public Tool(String t, float x, float y) {
@@ -50,6 +50,7 @@ public class Tool extends Entity implements Collidable {
     }
 
     public void clickEvent() {
+    	if (getCurrentAnim() != null) this.getCurrentAnim().reset();
         this.setCurrentAnim("hammer_slam");
         IOManager.getInstance().playSound("generic1", 0.3f);
     }
