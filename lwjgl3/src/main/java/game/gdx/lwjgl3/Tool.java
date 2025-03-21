@@ -52,7 +52,7 @@ public class Tool extends Entity implements Collidable {
     public void clickEvent() {
     	if (getCurrentAnim() != null) this.getCurrentAnim().reset();
         this.setCurrentAnim("hammer_slam");
-        IOManager.getInstance().playSound("generic1", 0.3f);
+        IOManager.getInstance().playSound("hammerSmash", 20f);
     }
 
     @Override

@@ -52,7 +52,7 @@ public class IOManager implements InputProcessor, Audio {
     }
     
 	private void populateSfxList() {
-		Sound sfx1 = this.newSound(Gdx.files.internal("sounds/sfx1.mp3"));
+		Sound hammerSmash = this.newSound(Gdx.files.internal("sounds/hammer_smash.mp3"));
 		Sound entitySpawn1 = this.newSound(Gdx.files.internal("sounds/entity_spawn1.mp3"));
 		Sound entityCollide1 = this.newSound(Gdx.files.internal("sounds/entity_collide1.mp3"));
 		Sound damageTaken1 = this.newSound(Gdx.files.internal("sounds/damage_taken1.mp3"));
@@ -60,7 +60,7 @@ public class IOManager implements InputProcessor, Audio {
 		soundEffects.put("damageTaken1", damageTaken1); // yet to be used
 		soundEffects.put("entityCollide1", entityCollide1); // mole squish
 		soundEffects.put("entitySpawn1", entitySpawn1); // mole pop up
-		soundEffects.put("generic1", sfx1); // hammer hit sound
+		soundEffects.put("hammerSmash", hammerSmash); // hammer hit sound
 	}
 	
 	private void populatePlaylist() {
