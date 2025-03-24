@@ -34,7 +34,9 @@ public abstract class Scene implements Screen {
 		multiplexer.addProcessor(GameMaster.ioManager);  // Handle custom cursor and game controls
 		Gdx.input.setInputProcessor(multiplexer);
 		
-		setBackground("game.png");
+		if (background == null) { // Only set default background if none exists
+	        setBackground("game.png");
+		}
 	};
 	public abstract void render(float delta);
 	public abstract void setBackground(String bgPath);

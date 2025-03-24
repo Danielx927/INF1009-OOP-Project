@@ -26,6 +26,8 @@ public class GameScene extends Scene {
     private int points = 0;
     private int streak = 0;
     private Label scoreLabel;
+    private float elapsedTime = 0f;  
+
 
     public GameScene(GameMaster game) {
         super(game);
@@ -195,7 +197,8 @@ public class GameScene extends Scene {
         endSceneButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameMaster.sceneManager.setScene(new EndScene(game));
+            	GameMaster.sceneManager.setScene(new EndScene(game, points, elapsedTime));
+
             }
         });
 
