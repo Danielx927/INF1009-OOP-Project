@@ -1,8 +1,12 @@
 package game.gdx.lwjgl3;
 
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -19,40 +23,62 @@ public class MainMenuScene extends Scene {
 		GameMaster.ioManager.playMusic("main-menu", true, 0.2f);
         
 		//Add Textures for the button
-		Texture playTexture = new Texture(Gdx.files.internal("play_button.png"));
-		Texture playHoverTexture = new Texture(Gdx.files.internal("play_button_hover.png"));
-		Texture quitTexture = new Texture(Gdx.files.internal("quit_button.png"));
-		Texture quitHoverTexture = new Texture(Gdx.files.internal("quit_button_hover.png"));
+		Texture playTexture = new Texture(Gdx.files.internal("buttons/playButton.png"));
+		Texture playHoverTexture = new Texture(Gdx.files.internal("buttons/playButtonHover.png"));
+		Texture quitTexture = new Texture(Gdx.files.internal("buttons/quitButton.png"));
+		Texture quitHoverTexture = new Texture(Gdx.files.internal("buttons/quitButtonHover.png"));
 		
 		ImageButton.ImageButtonStyle startButtonStyle = new ImageButton.ImageButtonStyle();
 		startButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playTexture));
 		startButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(playHoverTexture));
 		
+		Texture playClickTexture = new Texture(Gdx.files.internal("buttons/playButtonClick.png"));
+        startButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(playClickTexture));
+		
 		ImageButton startButton = new ImageButton(startButtonStyle);
-		startButton.setSize(200, 70);
-		startButton.setPosition(467, 165);
+		startButton.setSize(300, 200);
+		startButton.setPosition(410, 90);
 		
 		ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
 		quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
 		quitButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(quitHoverTexture));
+        Texture quitClickTexture = new Texture(Gdx.files.internal("buttons/quitButtonClick.png"));
+        quitButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(quitClickTexture));
 		
 		ImageButton quitButton = new ImageButton(quitButtonStyle);
-		quitButton.setSize(200, 70);
-		quitButton.setPosition(465, 90);
-        
+		quitButton.setSize(300, 200);
+		quitButton.setPosition(410, 20);
+
         startButton.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Transition to the next scene (e.g., GameScene2)
+            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });
         
         quitButton.addListener(new ClickListener() {
             @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            }
+            
+            @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Transition to the next scene (e.g., GameScene2)
-                Gdx.app.exit(); // Exit the application
+            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+                //Gdx.app.exit(); // Exit the application
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        Gdx.app.exit();
+                    }
+                }, 0.4f); // Adjust delay as needed (0.3 seconds)
             }
         });
         
@@ -87,7 +113,7 @@ public class MainMenuScene extends Scene {
 	}
 	@Override
 	public void setBackground(String bgPath) {
-		background = new Texture(Gdx.files.internal("game.png"));
+		background = new Texture(Gdx.files.internal("backgrounds/-MainMenuv2.png"));
 	}
 
 	@Override
