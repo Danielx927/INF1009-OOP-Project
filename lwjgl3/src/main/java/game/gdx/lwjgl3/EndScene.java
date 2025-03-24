@@ -5,11 +5,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -170,26 +174,66 @@ public class EndScene extends Scene {
     private Table createButtons() {
         Table buttonTable = new Table();
 
-        TextButton playButton = new TextButton("Play Again", skin);
-        playButton.setColor(Color.YELLOW);
-        playButton.addListener(new ClickListener() {
+		Texture playAgainTexture = new Texture(Gdx.files.internal("buttons/playAgainButton.png"));
+		Texture playAgainHoverTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonHover.png"));
+		
+		ImageButton.ImageButtonStyle playAgainButtonStyle = new ImageButton.ImageButtonStyle();
+		playAgainButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playAgainTexture));
+		playAgainButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(playAgainHoverTexture));
+		
+		Texture playAgainClickTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonClick.png"));
+		playAgainButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(playAgainClickTexture));
+		
+		ImageButton playAgainButton = new ImageButton(playAgainButtonStyle);
+		
+		playAgainButton.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            }
+            
             @Override
             public void clicked(InputEvent event, float x, float y) {
+            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });
+		
+		Texture quitTexture = new Texture(Gdx.files.internal("buttons/quitButton.png"));
+		Texture quitHoverTexture = new Texture(Gdx.files.internal("buttons/quitButtonHover.png"));
+		
+		ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
+		quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
+		quitButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(quitHoverTexture));
+		
+        Texture quitClickTexture = new Texture(Gdx.files.internal("buttons/quitButtonClick.png"));
+        quitButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(quitClickTexture));
+		
+		ImageButton quitButton = new ImageButton(quitButtonStyle);
 
-        TextButton quitButton = new TextButton("Quit", skin);
-        quitButton.setColor(Color.YELLOW);
         quitButton.addListener(new ClickListener() {
             @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            }
+            
+            @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+                //Gdx.app.exit(); // Exit the application
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        Gdx.app.exit();
+                    }
+                }, 0.4f); // Adjust delay as needed (0.3 seconds)
             }
         });
 
-        buttonTable.add(playButton).size(200, 50).pad(10);
-        buttonTable.add(quitButton).size(200, 50).pad(10);
+        buttonTable.add(playAgainButton).size(200, 100).pad(10).padLeft(-20).padTop(-40);
+        buttonTable.row();
+        buttonTable.add(quitButton).size(200, 100).pad(10).padLeft(-120).padTop(-70);
+        buttonTable.setPosition(buttonTable.getX() - 20, buttonTable.getY());
 
         return buttonTable;
     }
