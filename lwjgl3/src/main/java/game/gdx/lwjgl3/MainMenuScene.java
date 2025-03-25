@@ -16,7 +16,9 @@ public class MainMenuScene extends Scene {
 	public MainMenuScene(GameMaster game) {
 		super(game);
 		this.game = game;
-		GameMaster.ioManager.playMusic("main-menu", true, 0.2f);
+		
+        GameMaster.ioManager.clearMusicQueue();
+		GameMaster.ioManager.pushMusic("main-menu", true, 0.2f);
         
 		//Add Textures for the button
 		Texture playTexture = new Texture(Gdx.files.internal("buttons/playButton.png"));
@@ -48,13 +50,13 @@ public class MainMenuScene extends Scene {
         startButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
             }
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Transition to the next scene (e.g., GameScene2)
-            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });
@@ -62,12 +64,12 @@ public class MainMenuScene extends Scene {
         quitButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
             }
             
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
                 //Gdx.app.exit(); // Exit the application
                 Timer.schedule(new Timer.Task() {
                     @Override

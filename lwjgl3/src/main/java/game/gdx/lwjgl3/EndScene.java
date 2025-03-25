@@ -30,6 +30,10 @@ public class EndScene extends Scene {
         super(game);
         this.finalScore = score;
         this.finalTime = time;
+        
+        GameMaster.ioManager.clearMusicQueue();
+		GameMaster.ioManager.pushMusic("endTriumph", false, 1f);
+		GameMaster.ioManager.pushMusic("jungle", true, 1f);
 
         // Set background image
         setBackground("backgrounds/-EndSceneFinalV2.png");
@@ -189,12 +193,12 @@ public class EndScene extends Scene {
 		playAgainButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
             }
             
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });
@@ -214,12 +218,13 @@ public class EndScene extends Scene {
         quitButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_hover.mp3")).play(1.0f);  // Hover sound
+            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
             }
             
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	GameMaster.ioManager.newSound(Gdx.files.internal("sounds/button_click.mp3")).play(0.3f);
+            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
+
                 //Gdx.app.exit(); // Exit the application
                 Timer.schedule(new Timer.Task() {
                     @Override

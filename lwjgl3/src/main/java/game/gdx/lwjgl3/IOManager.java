@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.AudioRecorder;
@@ -15,18 +14,20 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
+import com.badlogic.gdx.utils.Queue;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;
 	private List<InputEvent> inputList;
 	private HashMap<String, Sound> soundEffects;
-	private HashMap<String, Music> playlist;
-	private Music currentTrack;
+	private HashMap<String, Music> playlist; // Stores all unique music tracks
+	private Queue<MusicQueueItem> musicQueue; // Is used to play the tracks in their desired order
     private Tool tool;
 
     public IOManager() {
     	soundEffects = new HashMap<String, Sound>();
     	playlist = new HashMap<String, Music>();
+    	musicQueue = new Queue<MusicQueueItem>();
     	inputList = new ArrayList<InputEvent>();
 
     	this.populateSfxList();
@@ -56,7 +57,11 @@ public class IOManager implements InputProcessor, Audio {
 		Sound entitySpawn1 = this.newSound(Gdx.files.internal("sounds/entity_spawn1.mp3"));
 		Sound entityCollide1 = this.newSound(Gdx.files.internal("sounds/entity_collide1.mp3"));
 		Sound damageTaken1 = this.newSound(Gdx.files.internal("sounds/damage_taken1.mp3"));
-
+		Sound buttonHover = this.newSound(Gdx.files.internal("sounds/button_hover.mp3"));
+		Sound buttonClick = this.newSound(Gdx.files.internal("sounds/button_click.mp3"));
+	
+		soundEffects.put("buttonHover", buttonHover); // button click
+		soundEffects.put("buttonClick", buttonClick); // button hover
 		soundEffects.put("damageTaken1", damageTaken1); // yet to be used
 		soundEffects.put("entityCollide1", entityCollide1); // mole squish
 		soundEffects.put("entitySpawn1", entitySpawn1); // mole pop up
@@ -67,10 +72,12 @@ public class IOManager implements InputProcessor, Audio {
 		Music starlings = this.newMusic(Gdx.files.internal("music/starlings.mp3"));
 		Music jungle = this.newMusic(Gdx.files.internal("music/jungle.mp3"));
 		Music mainMenu = this.newMusic(Gdx.files.internal("music/main-menu.mp3"));
+		Music endTriumph = this.newMusic(Gdx.files.internal("music/end-scene.mp3"));
 
 		playlist.put("starlings", starlings);
 		playlist.put("jungle", jungle); // game bg music
 		playlist.put("main-menu", mainMenu);
+		playlist.put("endTriumph", endTriumph);
 
 	}
 	
@@ -192,14 +199,14 @@ public class IOManager implements InputProcessor, Audio {
         }
 	}
 	
-	// This playMusic function is for starting a new track.
+	// This playMusic function is for immediately playing a track (from the head)
 	public void playMusic(String key, Boolean looping, float vol) {
-		if (currentTrack != null) currentTrack.stop();
 		try {
-			currentTrack = playlist.get(key);
-			currentTrack.setLooping(looping);
-			currentTrack.setVolume(vol);
-			currentTrack.play();
+			MusicQueueItem newTrack = new MusicQueueItem(playlist.get(key), looping, vol);
+			stopMusic(); // Stop currently playing track
+			
+			musicQueue.addFirst(newTrack);
+			musicQueue.first().getTrack().play();
 		}
 		catch (NullPointerException e) {
             System.out.print("NullPointerException: Ensure the key exists in the playlist HashMap.\n");
@@ -208,14 +215,50 @@ public class IOManager implements InputProcessor, Audio {
 	
 	// This playMusic function is for resuming the current track.
 	public void playMusic() {
-		if (currentTrack != null) currentTrack.play();
+		if (musicQueue.notEmpty()) musicQueue.first().getTrack().play();
+	}
+	
+	// Pushes a new track into the queue. (from the tail)
+	public void pushMusic(String key, Boolean looping, float vol) {
+		try {
+			MusicQueueItem newTrack = new MusicQueueItem(playlist.get(key), looping, vol);
+			musicQueue.addLast(newTrack);
+			
+			// Play track if there weren't any tracks in the queue.
+			if (musicQueue.first() == newTrack) musicQueue.first().getTrack().play();
+		}
+		catch (NullPointerException e) {
+            System.out.print("NullPointerException: Ensure the key exists in the playlist HashMap.\n");
+		}
+	}
+	
+	// Pops the latest track out of the queue.
+	public void popMusic() {
+		musicQueue.first().dispose();
+		musicQueue.removeFirst();
+	}
+	
+	// Checks for updates to the queue, if track is finished, play the next in queue.
+	public void updateMusicQueue() {
+		if (isCurrentlyPlaying()) {
+			return;
+		} else {
+			popMusic();
+			musicQueue.first().getTrack().play();
+		}
+	}
+	
+	public void clearMusicQueue() {
+		for (int i = 0; i < musicQueue.size; i++) {
+			musicQueue.get(i).dispose();
+		}
+		
+		musicQueue.clear();
 	}
 	
 	public boolean isCurrentlyPlaying() {
 		try {
-			if (currentTrack.isPlaying()) {
-				return true;
-			} 
+			if (musicQueue.first().getTrack().isPlaying()) return true; 
 			return false;
 		} catch (NullPointerException e) {
 			return false;
@@ -223,14 +266,11 @@ public class IOManager implements InputProcessor, Audio {
 	}
 	
 	public void pauseMusic() {
-		currentTrack.pause();
+		musicQueue.first().getTrack().pause();
 	}
 	
 	public void stopMusic() {
-		if (currentTrack != null) {
-			currentTrack.stop();
-			currentTrack = null;
-		}
+		if (musicQueue.notEmpty()) musicQueue.first().getTrack().stop(); // Stop currently playing track
 	}
 
 	@Override
@@ -257,6 +297,7 @@ public class IOManager implements InputProcessor, Audio {
 		for (Map.Entry<String, Music> item : playlist.entrySet())
 			playlist.get(item.getKey()).dispose();
 		
+		clearMusicQueue();
 		inputList = null;
 	}
 }
