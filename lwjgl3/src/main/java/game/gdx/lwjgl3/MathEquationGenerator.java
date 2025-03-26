@@ -2,48 +2,41 @@ package game.gdx.lwjgl3;
 
 import java.util.Random;
 
-
-public class MathEquationGenerator {
-	private static int integer2;
-	private static final Random rng = new Random();
-	private static final char[] OPERATORS = {'+', '-', '*', '/'};
+public abstract class MathEquationGenerator implements EquationGenerator{
+	protected final Random random = new Random();
+	protected int operand1;
+	protected int operand2;
+	protected final String equationType;
 	
-	public static void generateEquation(int scale) {
-		int result = rng.nextInt(10 * scale) + 1;
-		integer2 = rng.nextInt(10) + 1;
-		char operator = OPERATORS[rng.nextInt(OPERATORS.length)];
-		int integer1 = calculateInt1(result, operator);
-		System.out.println(integer1 + " " + operator + " " + integer2 + " = " + result);
+	protected abstract int calculateResult();
+	
+	protected MathEquationGenerator(String equationType) {
+		this.equationType = equationType;
 	}
 	
-	public static void setInteger2(int i) {
-		integer2 = i;
+	@Override
+	public String generateEquation() {
+		generateOperands();
+		return operand1 + " " + getOperator() + " " + operand2 + " = ?";
 	}
 	
-	public static boolean isPrime(int num) {
-		for (int i = 2; i * i <= num; i++) {
-			if (num % i == 0) {
-				return false;
-			}
+	@Override
+	public int getResult() {
+		return calculateResult();
+	}
+	
+	protected void generateOperands() {
+		operand1 = random.nextInt(10) + 1;
+		operand2 = random.nextInt(10) + 1;
+ 	}
+	
+	protected String getOperator() {
+		switch(equationType.toLowerCase()) {
+			case "addition": return "+";
+			case "subtraction": return "-";
+			case "multiplication": return "x";
+			case "division": return "/";
+			default: return "";
 		}
-		return true;
-	}
-	
-	private static int calculateInt1(int result, char operator) {
-		switch (operator) {
-		case '+' : return result - integer2;
-		case '-' : return result + integer2;
-		case '*' : 
-			if (isPrime(result)) {
-				setInteger2(1);
-				return result;
-			}
-			
-			if (result % integer2 != 0) {
-				setInteger2(integer2 - (result % integer2));
-			} return result / integer2;
-		case '/' : return result * integer2;
-		}
-		return 0;
 	}
 }
