@@ -21,6 +21,7 @@ public class MainMenuScene extends Scene {
 		GameMaster.ioManager.pushMusic("main-menu", true, 0.2f);
         
 		//Add Textures for the button
+		
 		Texture playTexture = new Texture(Gdx.files.internal("buttons/playButton.png"));
 		Texture playHoverTexture = new Texture(Gdx.files.internal("buttons/playButtonHover.png"));
 		Texture quitTexture = new Texture(Gdx.files.internal("buttons/quitButton.png"));
@@ -116,6 +117,8 @@ public class MainMenuScene extends Scene {
 
 	@Override
 	public void render(float delta) {
+		EquationGenerator randomEq = EquationGeneratorFactory.randomGenerator();
+		System.out.println(randomEq.generateEquation());
 		Gdx.gl.glClearColor(0, 0, 0, 1);
     	batch.begin();
     	batch.draw(this.getBackground(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
