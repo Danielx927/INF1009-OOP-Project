@@ -13,7 +13,7 @@ public class DivisionEquationGenerator extends MathEquationGenerator {
 	
 	@Override
 	protected void generateOperands() {
-		operand2 = random.nextInt(10) + 1;
+		operand2 = random.nextInt(9) + 1;
 		operand1 = operand2 * (random.nextInt(10) + 1);
 	}
 }

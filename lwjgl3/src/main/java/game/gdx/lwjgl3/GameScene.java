@@ -1,5 +1,10 @@
 package game.gdx.lwjgl3;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +35,12 @@ public class GameScene extends Scene {
 	private Label streakLabel;
 	private float elapsedTime = 0f;
 	private BitmapFont Cfont;
+	//Math
+	private EquationGenerator currentEquation;
+	private Label equationLabel;
+	private int answer;
+	private List<InteractiveObject> activeMoles = new ArrayList<>();
+	
 
 	public GameScene(GameMaster game) {
 		super(game);
@@ -44,7 +55,21 @@ public class GameScene extends Scene {
 		Cfont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
 				Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
 		Cfont.getData().setScale(0.6f);
+		
+		// Math equation font
+		BitmapFont Mfont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
+				Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
+		Mfont.getData().setScale(0.4f);
+		
+		 // Create equation label
+	    Label.LabelStyle equationStyle = new Label.LabelStyle();
+	    equationStyle.font = Mfont; // Use your preferred font
+	    
+	    equationLabel = new Label("", equationStyle);
 
+	    
+	    currentEquation = EquationGeneratorFactory.randomGenerator();
+	    generateNewEquation();
 		// Labels for score and streak
 		BitmapFont streakFont = new BitmapFont();
 		streakFont.getData().setScale(0.5f);
@@ -76,6 +101,7 @@ public class GameScene extends Scene {
 		stage.addActor(pauseButton);
 		stage.addActor(scoreLabel);
 		stage.addActor(streakLabel);
+		stage.addActor(equationLabel);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);
@@ -100,6 +126,10 @@ public class GameScene extends Scene {
 	}
 
 	private void spawnIO() {
+	    if (currentEquation == null) {
+	    	currentEquation = EquationGeneratorFactory.randomGenerator();
+	        return;
+	    }
 		int col_index = (int) (Math.random() * grid[0].length);
 		int row_index = (int) (Math.random() * grid.length);
 		GameTile tile = grid[row_index][col_index];
@@ -107,15 +137,54 @@ public class GameScene extends Scene {
 		if (!tile.getOccupied()) {
 			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
 					60, 60, 100, 2f);
+			
+	        boolean isCorrectMole = Math.random() < 0.25f; // 25% chance
+	        int moleAnswer = isCorrectMole ? currentEquation.getResult() : 
+	            generateWrongAnswer(currentEquation.getResult());
+	        
+	        io.setAnswerData(moleAnswer, isCorrectMole);
+	        activeMoles.add(io);
 			em.addEntity(io);
 			GameMaster.ioManager.playSound("entitySpawn1", 1.0f);
 			GameMaster.animManager.useTemplate(io, "mole_template");
 			io.setCurrentAnim("mole_popup");
 			tile.setOccupied(true);
+	        System.out.println("Spawned mole with answer: " + moleAnswer + 
+                    " for equation: " + currentEquation.generateEquation());
 			System.out.println("Spawned mole at (" + tile.getX() + ", " + tile.getY() + ")");
 		} else {
 			System.out.println("Tile occupied, skipping spawn");
 		}
+	}
+	private void generateNewEquation() {
+	    equationLabel.setPosition(
+	        Gdx.graphics.getWidth()/2 - 40, 
+	        Gdx.graphics.getHeight() - 100
+	    );
+	    currentEquation = EquationGeneratorFactory.randomGenerator();
+	    answer = currentEquation.getResult();
+	    equationLabel.setText(currentEquation.generateEquation());
+	}
+	
+	private int generateWrongAnswer(int correctAnswer) {
+	    Random rand = new Random();
+	    int wrongAnswer;
+	    do {
+	        wrongAnswer = correctAnswer + rand.nextInt(5) - 2;
+	    } while (wrongAnswer == correctAnswer || wrongAnswer <= 0);
+	    return wrongAnswer;
+	}
+	
+	public void checkPlayerAnswer(int playerAnswer) {
+	    if (playerAnswer == answer) {
+	        addPoints(10);
+	        equationLabel.setText("Correct.");
+	    } else {
+	        equationLabel.setText("Wrong. Answer was " + answer);
+	        resetStreak();
+	    }
+	    
+	    generateNewEquation();
 	}
 
 	public void addPoints(int pointsGained) {
@@ -265,12 +334,6 @@ public class GameScene extends Scene {
 		// Timer
 		String timeText = String.format("%.2f", timeElapsed);
 		Cfont.draw(batch, timeText, 10, Gdx.graphics.getHeight() - 40);
-		// Cfont.draw(batch, "" + points, 20, Gdx.graphics.getHeight() - 50);
-		// Cfont.draw(batch, "Streak: " + streak,
-		// Gdx.graphics.getWidth() - 200, // Adjust X as needed
-		// Gdx.graphics.getHeight() - 50
-		// );
-
 		batch.end();
 
 		if (!isPaused) {
