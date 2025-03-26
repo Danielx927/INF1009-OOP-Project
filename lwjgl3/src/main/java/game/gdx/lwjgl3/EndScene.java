@@ -46,6 +46,7 @@ public class EndScene extends Scene {
 
         // Load, sort, and save scores
         List<String> scores = loadScores();
+        // Add the *new* run’s score/time
         scores.add(finalScore + "," + String.format("%.2f", finalTime));
         scores = sortAndTrimScores(scores);
         saveScores(scores);
@@ -62,8 +63,8 @@ public class EndScene extends Scene {
         float screenHeight = Gdx.graphics.getHeight();
 
         // Dynamically scale font size and adjust table padding to be smaller
-        float fontScale = screenHeight / 600f;  // Base scale for font size
-        float tablePadding = screenWidth * 0.02f; // Smaller padding for a smaller table
+        float fontScale = screenHeight / 600f;  
+        float tablePadding = screenWidth * 0.02f; 
 
         // Add the numerical score and time values next to background text
         createScoreTimeValues(screenWidth, screenHeight);
@@ -105,10 +106,14 @@ public class EndScene extends Scene {
         scoreValueLabel.setFontScale(2.5f * fontScale);
         scoreValueLabel.setPosition(scoreValueX, scoreValueY);
 
-        // Create time label
+        // Create time label showing this run’s final time
         Label timeValueLabel = new Label(String.format("%.2f", finalTime) + "s", skin);
         timeValueLabel.setColor(Color.WHITE);
-        timeValueLabel.setFontScale(2.5f * fontScale);
+        // Optionally scale the font if needed
+        float timeBaseScale = 2.5f * fontScale;
+        int timeDigits = String.format("%.2f", finalTime).length();
+        float timeScale = timeDigits >= 5 ? timeBaseScale * (5f/timeDigits) : timeBaseScale;
+        timeValueLabel.setFontScale(timeScale);
         timeValueLabel.setPosition(timeValueX, timeValueY);
 
         stage.addActor(scoreValueLabel);
@@ -116,7 +121,7 @@ public class EndScene extends Scene {
     }
 
     private Table createScoreboard(List<String> scores, float screenWidth, float screenHeight,
-                                     float fontScale, float tablePadding) {
+                                   float fontScale, float tablePadding) {
         Table table = new Table();
         table.pad(tablePadding); // Use the smaller padding for the table
 
@@ -128,7 +133,7 @@ public class EndScene extends Scene {
         boardPixmap.dispose();
         table.setBackground(new TextureRegionDrawable(boardTex));
 
-        // Headers with reduced cell padding
+        // Headers
         Label rankHeader = new Label("RANK", skin);
         rankHeader.setColor(Color.BLACK);
         rankHeader.setFontScale(1.5f * fontScale);
@@ -147,7 +152,7 @@ public class EndScene extends Scene {
         table.add(timeHeader).align(Align.center).pad(2);
         addHorizontalLine(table, 3);
 
-        // Score rows with reduced cell padding
+        // For each entry in the file, read the stored time (parts[1])
         int rank = 1;
         for (String entry : scores) {
             String[] parts = entry.split(",");
@@ -159,6 +164,7 @@ public class EndScene extends Scene {
             pointsLabel.setColor(Color.BLACK);
             pointsLabel.setFontScale(1.5f * fontScale);
 
+            // Show the time from the file for this row
             Label timeLabel = new Label(parts[1] + "s", skin);
             timeLabel.setColor(Color.BLACK);
             timeLabel.setFontScale(1.5f * fontScale);
@@ -224,14 +230,13 @@ public class EndScene extends Scene {
             }
         });
 
-        // Place both buttons in the same layout as in the original code
+        // Layout
         buttonTable.add(playAgainButton).size(200, 100).pad(10).padLeft(-20).padTop(-40);
         buttonTable.row();
         buttonTable.add(quitButton).size(200, 100).pad(10).padLeft(-120).padTop(-70);
 
-        // Optional: adjust the position of the entire button table if needed
+        // Adjust the position if needed
         buttonTable.setPosition(buttonTable.getX() - 20, buttonTable.getY());
-
         return buttonTable;
     }
 
