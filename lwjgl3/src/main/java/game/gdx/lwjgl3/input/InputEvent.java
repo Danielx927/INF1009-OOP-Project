@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.input;
 
 public class InputEvent {
 	public int keyCode, xPos, yPos, ptr, mouseBtn;

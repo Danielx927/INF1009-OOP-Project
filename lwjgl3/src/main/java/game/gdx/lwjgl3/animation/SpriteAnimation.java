@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.animation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import game.gdx.lwjgl3.Entity;
 
 public class SpriteAnimation {
 //	private float frameInterval;

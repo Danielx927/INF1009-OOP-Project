@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.input;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.utils.Queue;
+
+import game.gdx.lwjgl3.audio.MusicQueueItem;
+import game.gdx.lwjgl3.entity.Tool;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;

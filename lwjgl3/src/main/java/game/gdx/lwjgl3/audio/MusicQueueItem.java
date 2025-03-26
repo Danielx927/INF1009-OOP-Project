@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.audio;
 
 import com.badlogic.gdx.audio.Music;
 

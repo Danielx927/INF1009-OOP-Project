@@ -3,6 +3,9 @@ package game.gdx.lwjgl3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import game.gdx.lwjgl3.entity.Tool;
+import game.gdx.lwjgl3.input.IOManager;
+
 public class InteractiveObject extends Entity implements Collidable {
     private int points;
     private float lifeTime;

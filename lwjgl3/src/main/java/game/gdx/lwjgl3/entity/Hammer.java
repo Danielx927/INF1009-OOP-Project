@@ -1,4 +1,6 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.entity;
+
+import game.gdx.lwjgl3.input.IOManager;
 
 public class Hammer extends Tool {
 

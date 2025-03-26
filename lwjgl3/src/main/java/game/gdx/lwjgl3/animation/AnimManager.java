@@ -1,8 +1,10 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.animation;
 
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+
+import game.gdx.lwjgl3.Entity;
 
 public class AnimManager {
 	private static AnimManager instance;

@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.gdx.lwjgl3.animation.SpriteAnimation;
+
 public abstract class Entity {
     private float x;
     private float y;
