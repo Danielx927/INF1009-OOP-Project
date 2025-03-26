@@ -34,8 +34,9 @@ public class GameScene extends Scene {
         this.game = game;
         this.em = new EntityManager(this);
         this.generateGrid();
-
-        GameMaster.ioManager.playMusic("jungle", true, 0.5f);
+        
+        GameMaster.ioManager.clearMusicQueue();
+        GameMaster.ioManager.pushMusic("jungle", true, 0.5f);
 
         pauseMenu = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));

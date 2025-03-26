@@ -54,6 +54,7 @@ public class GameMaster extends Game {
 
         // Always handle inputs for the hammer (movement and clicks)
         ioManager.handleInputs();
+        ioManager.updateMusicQueue();
 
         super.render();
         em.render(batch);
