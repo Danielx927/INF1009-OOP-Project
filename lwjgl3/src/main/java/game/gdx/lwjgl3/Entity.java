@@ -74,6 +74,8 @@ public abstract class Entity {
     }
 
     public void setCurrentAnim(String s) {
+    	if (getCurrentAnim() != null) this.getCurrentAnim().reset();
+
         if (animTemplate.containsKey(s)) {
             SpriteAnimation anim = animTemplate.get(s);
             this.currentAnim = anim;

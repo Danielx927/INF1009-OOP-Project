@@ -12,8 +12,7 @@ public class SpriteAnimation {
 	private Animation<TextureRegion> anim;
 	private Texture sheet;
 	private int emptyFramesOffset;
-	
-	float stateTime;
+	private float stateTime;
 	
 	public SpriteAnimation(Animation<TextureRegion> anim,  int offset) {
 		this.emptyFramesOffset = offset;

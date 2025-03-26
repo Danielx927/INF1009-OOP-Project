@@ -12,7 +12,7 @@ public class GameMaster extends Game {
     public static AnimManager animManager;
     public static EntityManager em;
     public static SceneManager sceneManager;
-    public Tool tool;
+    public Hammer hammer;
 
     @Override
     public void create() {
@@ -23,16 +23,16 @@ public class GameMaster extends Game {
         collisionManager = new CollisionManager();
         em = new EntityManager();
 
-        tool = new Tool("sprites/hammer.png", 100, 100);
+        hammer = new Hammer("sprites/hammer.png", 100, 100);
         new IOManager();
         ioManager = IOManager.getInstance();
-        ioManager.addTool(tool);
+        ioManager.addTool(hammer);
         Gdx.input.setInputProcessor(ioManager);
-        em.addEntity(tool);
+        em.addEntity(hammer);
 
         new AnimManager();
         animManager = AnimManager.getInstance();
-        animManager.useTemplate(tool, "hammer_template");
+        animManager.useTemplate(hammer, "hammer_template");
 
         batch = new SpriteBatch();
         sceneManager = new SceneManager(this);

@@ -6,7 +6,7 @@ public class InputEvent {
 	public char keyChar;
 	// 0 = keyboard, 1 = mouse move, 2 = mouse click, 3 = mouse scroll
 	public int inputType; 
-	public IOManager ioMgr;
+	private IOManager ioMgr;
 	
 	public InputEvent() {
 		ioMgr = IOManager.getInstance();

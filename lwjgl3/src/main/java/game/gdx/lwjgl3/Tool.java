@@ -11,26 +11,33 @@ public class Tool extends Entity implements Collidable {
     private Sprite sprite;
     private float cooldown;
     private static final float CD_TIMER = 60;
-    private static final Vector2 OFFSET = new Vector2(-70, Gdx.graphics.getHeight() - 60);
+    private static final Vector2 OFFSET = new Vector2(-70, -60);
     private Body body;
 
     public Tool(String t, float x, float y) {
-        super(t, x, y, 128, 128);
+        super(t, x, y);
         this.cooldown = 0;
         this.body = null;
         this.setSprite(super.getTexture());
     }
 
+    // Called everytime mouse is moved, clicked
     public void setCoords(int X, int Y) {
         float newX = X + OFFSET.x;
-        float newY = -Y + OFFSET.y;
+        float newY = Gdx.graphics.getHeight() - Y + OFFSET.y;
+        
         super.setX(newX);
         super.setY(newY);
         this.sprite.setPosition(newX, newY);
-        if (body != null) {
-            body.setTransform(newX + getWidth() / 2f, newY + getHeight() / 2f, 0);
-        }
+        if (body != null) body.setTransform(newX + getWidth() / 2f, newY + getHeight() / 2f, 0);
+
+//        System.out.println("=======================================================");
+//        System.out.println("Cursor Coords at (" + X + ", " + Y + ")");
+//        System.out.println("Body Coords at (" + body.getPosition().x + ", " + body.getPosition().y + ")");
+//        System.out.println("Sprite Coords (" + getX() + ", " + getY() + ")");
+
     }
+    
 
     public Sprite getSprite() {
         return this.sprite;
@@ -50,9 +57,7 @@ public class Tool extends Entity implements Collidable {
     }
 
     public void clickEvent() {
-    	if (getCurrentAnim() != null) this.getCurrentAnim().reset();
-        this.setCurrentAnim("hammer_slam");
-        IOManager.getInstance().playSound("hammerSmash", 20f);
+        IOManager.getInstance().playSound("defaultClick", 1f);
     }
 
     @Override
@@ -101,14 +106,15 @@ public class Tool extends Entity implements Collidable {
     }
 
     @Override
+    // this dont do anything. coords are updated in setCoords anyway. i delete can or not
     public void updatePosition() {
-        if (body != null) {
-            float newX = body.getPosition().x - getWidth() / 2f;
-            float newY = body.getPosition().y - getHeight() / 2f;
-            super.setX(newX);
-            super.setY(newY);
-            sprite.setPosition(newX, newY);
-        }
+//    	if (body != null) {
+//            float newX = body.getPosition().x - getWidth() / 2f;
+//            float newY = body.getPosition().y - getHeight() / 2f;
+//            super.setX(newX);
+//            super.setY(newY);
+//            sprite.setPosition(newX, newY);
+//        }
     }
 
     @Override
@@ -118,6 +124,7 @@ public class Tool extends Entity implements Collidable {
 
     @Override
     public void onNoCollision() {
-        System.out.println("❌ Tool at (" + getX() + ", " + getY() + ") did not collide.");
+        System.out.println("❌ Tool at (" + body.getPosition().x + ", " + body.getPosition().y + ") did not collide.");
+
     }
 }
