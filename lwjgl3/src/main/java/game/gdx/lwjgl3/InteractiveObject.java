@@ -1,5 +1,14 @@
 package game.gdx.lwjgl3;
 
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -12,6 +21,11 @@ public class InteractiveObject extends Entity implements Collidable {
     private float maxLifeTime;
     private Body body;
     public boolean wasHit = false;
+    private int assignedAnswer;
+    private boolean isCorrect;
+    private NinePatch answerBox;
+    private BitmapFont answerFont;
+    private boolean showAnswer = true; 
 
     public InteractiveObject(String t, float x, float y, float w, float h, int p, float d) {
         super(t, x, y, w, h);
@@ -19,6 +33,19 @@ public class InteractiveObject extends Entity implements Collidable {
         maxLifeTime = d;
         lifeTime = 0;
         this.body = null;
+        
+        Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pix.setColor(0.3f, 0.2f, 0.1f, 0.9f); // Brownish semi-transparent
+        pix.fill();
+        answerBox = new NinePatch(new Texture(pix), 1, 1, 1, 1);
+        pix.dispose();
+        
+        answerFont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
+				Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
+        answerFont.getData().setScale(0.5f); // Smaller size
+        answerFont.setColor(Color.WHITE);
+        
+        isCorrect = true;
     }
 
     public boolean isActive(float delta) {
@@ -30,10 +57,23 @@ public class InteractiveObject extends Entity implements Collidable {
         return points;
     }
 
-    void setPoints(int p) {
+    public void setPoints(int p) {
         points = p;
     }
-
+    
+    public void setAnswerData(int answer, boolean isCorrect) {
+        this.assignedAnswer = answer;
+        this.isCorrect = isCorrect;
+    }
+    
+    public int getAssignedAnswer() {
+        return assignedAnswer;
+    }
+    
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+	
     @Override
     public void render(SpriteBatch b) {
         if (getCurrentAnim() != null) {
@@ -45,6 +85,24 @@ public class InteractiveObject extends Entity implements Collidable {
             }
         } else {
             b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
+        }
+        // Draw answer box if enabled
+        if (showAnswer && assignedAnswer != 0) {
+            float boxX = getX() + getWidth()/2 - 25; 
+            float boxY = getY() + getHeight() + 5; 
+            
+            // Draw box
+            b.setColor(isCorrect ? Color.GREEN : Color.RED); // Color hint
+            answerBox.draw(b, boxX, boxY, 50, 30);
+            b.setColor(Color.WHITE);
+            
+            // Draw answer text 
+            String answer = String.valueOf(assignedAnswer);
+            GlyphLayout layout = new GlyphLayout(answerFont, answer);
+            answerFont.draw(b, answer,
+                boxX + 25 - layout.width/2,
+                boxY + 20 + layout.height/2
+            );
         }
     }
 
