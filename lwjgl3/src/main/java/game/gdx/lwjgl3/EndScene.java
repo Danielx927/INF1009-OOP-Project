@@ -21,31 +21,30 @@ import java.util.List;
 public class EndScene extends Scene {
     private int finalScore;
     private float finalTime;
-
-    private Texture blackTexture;  // For the black grid lines in the table
+    private Texture blackTexture;  // For table grid lines
     private static final String SCORE_FILE = "scores.txt";
 
-    // Constructor
     public EndScene(GameMaster game, int score, float time) {
         super(game);
         this.finalScore = score;
         this.finalTime = time;
-        
+
+        // Play music
         GameMaster.ioManager.clearMusicQueue();
-		GameMaster.ioManager.pushMusic("endTriumph", false, 1f);
-		GameMaster.ioManager.pushMusic("jungle", true, 1f);
+        GameMaster.ioManager.pushMusic("endTriumph", false, 1f);
+        GameMaster.ioManager.pushMusic("jungle", true, 1f);
 
         // Set background image
-        setBackground("backgrounds/-EndSceneFinalV2.png");
+        setBackground("backgrounds/-EndSceneFinalV3.png");
 
-        // Create a black 1x1 texture for horizontal grid lines
+        // Create black texture for table lines
         Pixmap blackPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         blackPixmap.setColor(Color.BLACK);
         blackPixmap.fill();
         blackTexture = new Texture(blackPixmap);
         blackPixmap.dispose();
 
-        // Load, sort, save scores
+        // Load, sort, and save scores
         List<String> scores = loadScores();
         scores.add(finalScore + "," + String.format("%.2f", finalTime));
         scores = sortAndTrimScores(scores);
@@ -59,195 +58,188 @@ public class EndScene extends Scene {
     }
 
     private void createUI(List<String> scores) {
-        // 1) Current score/time labels (top-left)
-        createScoreTimeLabels();
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
 
-        // 2) The scoreboard itself (white background, black lines)
-        Table scoreboard = createScoreboard(scores);
+        // Dynamically scale font size and adjust table padding to be smaller
+        float fontScale = screenHeight / 600f;  // Base scale for font size
+        float tablePadding = screenWidth * 0.02f; // Smaller padding for a smaller table
 
-        // Make the scoreboard smaller so it fits your background’s white area
-        scoreboard.setSize(250, 240); 
-        // Position it where your background’s white area is
-        scoreboard.setPosition(30, 110); 
-        //  ^^^ Tweak these numbers so the scoreboard lines up perfectly
+        // Add the numerical score and time values next to background text
+        createScoreTimeValues(screenWidth, screenHeight);
 
+        // Create and position the leaderboard table
+        Table scoreboard = createScoreboard(scores, screenWidth, screenHeight, fontScale, tablePadding);
+        scoreboard.pack();
+
+        // Position the scoreboard below the displayed score/time
+        float scoreValueY = screenHeight * 0.8f; 
+        float timeValueY = screenHeight * 0.75f; 
+        float tableY = Math.min(scoreValueY, timeValueY) - scoreboard.getHeight() - (screenHeight * 0.02f);
+        float tableX = screenWidth * 0.06f;  
+        scoreboard.setPosition(tableX, tableY);
         stage.addActor(scoreboard);
 
-        // 3) Buttons below the scoreboard
-        Table buttonTable = createButtons();
-        // Pack it so it knows its own width/height
+        // Create and position the buttons (keeping their original placement)
+        Table buttonTable = createButtons(screenWidth, screenHeight);
         buttonTable.pack();
-        // Left-align it under the scoreboard. We'll place it a bit below scoreboard
-        float btnX = scoreboard.getX();                      // same left as scoreboard
-        float btnY = scoreboard.getY() - buttonTable.getHeight() - 20; // 20 px gap
-        buttonTable.setPosition(btnX, btnY);
 
+        float btnX = scoreboard.getX(); 
+        float btnY = scoreboard.getY() - buttonTable.getHeight() - (screenHeight * 0.03f);
+        buttonTable.setPosition(btnX, btnY);
         stage.addActor(buttonTable);
     }
 
-    /** 
-     * Creates and positions labels for the current game’s SCORE and TIME 
-     * in the top-left corner. Adjust to match your background text.
-     */
-    private void createScoreTimeLabels() {
-        // 1) Create the label for the SCORE value (just the number).
+    private void createScoreTimeValues(float screenWidth, float screenHeight) {
+        float fontScale = screenHeight / 600f; // Scale the font based on screen height
+
+        float scoreValueX = screenWidth * 0.2f;  
+        float scoreValueY = screenHeight * 0.89f; 
+
+        float timeValueX = screenWidth * 0.2f;   
+        float timeValueY = screenHeight * 0.79f; 
+
+        // Create score label
         Label scoreValueLabel = new Label(String.valueOf(finalScore), skin);
         scoreValueLabel.setColor(Color.WHITE);
-        scoreValueLabel.setFontScale(2f);
+        scoreValueLabel.setFontScale(2.5f * fontScale);
+        scoreValueLabel.setPosition(scoreValueX, scoreValueY);
 
-        // Place it exactly where you want, so it lines up with the background's "SCORE:" text.
-        // You must tweak these numbers to match your image.
-        float scoreX = 120;  // e.g. 150 px from left
-        float scoreY = 420;  // e.g. 420 px from bottom (or use from top if you prefer)
-        scoreValueLabel.setPosition(scoreX, scoreY);
-
-        stage.addActor(scoreValueLabel);
-
-        // 2) Create the label for the TIME value (just the number + "s").
+        // Create time label
         Label timeValueLabel = new Label(String.format("%.2f", finalTime) + "s", skin);
         timeValueLabel.setColor(Color.WHITE);
-        timeValueLabel.setFontScale(2f);
+        timeValueLabel.setFontScale(2.5f * fontScale);
+        timeValueLabel.setPosition(timeValueX, timeValueY);
 
-        // Again, place it to match the background's "TIME:" text.
-        // Adjust these numbers until it visually lines up with the "TIME:" line in your background.
-        float timeX = 100;
-        float timeY = 370;
-        timeValueLabel.setPosition(timeX, timeY);
-
+        stage.addActor(scoreValueLabel);
         stage.addActor(timeValueLabel);
     }
 
-
-    /**
-     * Creates a scoreboard table with a white background and black horizontal lines.
-     */
-    private Table createScoreboard(List<String> scores) {
+    private Table createScoreboard(List<String> scores, float screenWidth, float screenHeight,
+                                     float fontScale, float tablePadding) {
         Table table = new Table();
+        table.pad(tablePadding); // Use the smaller padding for the table
 
-        // White background
-        Pixmap whitePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        whitePixmap.setColor(Color.WHITE);
-        whitePixmap.fill();
-        Texture whiteTexture = new Texture(whitePixmap);
-        whitePixmap.dispose();
-        TextureRegionDrawable whiteBg = new TextureRegionDrawable(whiteTexture);
-        table.setBackground(whiteBg);
+        // White background for the scoreboard
+        Pixmap boardPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        boardPixmap.setColor(Color.WHITE);
+        boardPixmap.fill();
+        Texture boardTex = new Texture(boardPixmap);
+        boardPixmap.dispose();
+        table.setBackground(new TextureRegionDrawable(boardTex));
 
-        // Header row
+        // Headers with reduced cell padding
         Label rankHeader = new Label("RANK", skin);
         rankHeader.setColor(Color.BLACK);
+        rankHeader.setFontScale(1.5f * fontScale);
+
         Label pointsHeader = new Label("POINTS", skin);
         pointsHeader.setColor(Color.BLACK);
+        pointsHeader.setFontScale(1.5f * fontScale);
+
         Label timeHeader = new Label("TIME", skin);
         timeHeader.setColor(Color.BLACK);
+        timeHeader.setFontScale(1.5f * fontScale);
 
         table.row();
-        table.add(rankHeader).align(Align.center).pad(5);
-        table.add(pointsHeader).align(Align.center).pad(5);
-        table.add(timeHeader).align(Align.center).pad(5);
+        table.add(rankHeader).align(Align.center).pad(2);
+        table.add(pointsHeader).align(Align.center).pad(2);
+        table.add(timeHeader).align(Align.center).pad(2);
         addHorizontalLine(table, 3);
 
-        // Score rows
+        // Score rows with reduced cell padding
         int rank = 1;
         for (String entry : scores) {
             String[] parts = entry.split(",");
             Label rankLabel = new Label(String.valueOf(rank), skin);
             rankLabel.setColor(Color.BLACK);
+            rankLabel.setFontScale(1.5f * fontScale);
 
             Label pointsLabel = new Label(parts[0], skin);
             pointsLabel.setColor(Color.BLACK);
+            pointsLabel.setFontScale(1.5f * fontScale);
 
             Label timeLabel = new Label(parts[1] + "s", skin);
             timeLabel.setColor(Color.BLACK);
+            timeLabel.setFontScale(1.5f * fontScale);
 
             table.row();
-            table.add(rankLabel).align(Align.center).pad(5);
-            table.add(pointsLabel).align(Align.center).pad(5);
-            table.add(timeLabel).align(Align.center).pad(5);
-
+            table.add(rankLabel).align(Align.center).pad(2);
+            table.add(pointsLabel).align(Align.center).pad(2);
+            table.add(timeLabel).align(Align.center).pad(2);
             addHorizontalLine(table, 3);
             rank++;
         }
         return table;
     }
 
-    /**
-     * Creates a Table with the "Play Again" and "Quit" buttons (yellow),
-     * but does NOT position it. We do that in createUI().
-     */
-    private Table createButtons() {
+    private Table createButtons(float screenWidth, float screenHeight) {
         Table buttonTable = new Table();
 
-		Texture playAgainTexture = new Texture(Gdx.files.internal("buttons/playAgainButton.png"));
-		Texture playAgainHoverTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonHover.png"));
-		
-		ImageButton.ImageButtonStyle playAgainButtonStyle = new ImageButton.ImageButtonStyle();
-		playAgainButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playAgainTexture));
-		playAgainButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(playAgainHoverTexture));
-		
-		Texture playAgainClickTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonClick.png"));
-		playAgainButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(playAgainClickTexture));
-		
-		ImageButton playAgainButton = new ImageButton(playAgainButtonStyle);
-		
-		playAgainButton.addListener(new ClickListener() {
+        // Play Again Button
+        Texture playAgainTexture = new Texture(Gdx.files.internal("buttons/playAgainButton.png"));
+        Texture playAgainHoverTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonHover.png"));
+        ImageButton.ImageButtonStyle playAgainButtonStyle = new ImageButton.ImageButtonStyle();
+        playAgainButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playAgainTexture));
+        playAgainButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(playAgainHoverTexture));
+        Texture playAgainClickTexture = new Texture(Gdx.files.internal("buttons/playAgainButtonClick.png"));
+        playAgainButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(playAgainClickTexture));
+        ImageButton playAgainButton = new ImageButton(playAgainButtonStyle);
+        playAgainButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
+                GameMaster.ioManager.playSound("buttonHover", 1.0f);
             }
-            
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
+                GameMaster.ioManager.playSound("buttonClick", 0.3f);
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });
-		
-		Texture quitTexture = new Texture(Gdx.files.internal("buttons/quitButton.png"));
-		Texture quitHoverTexture = new Texture(Gdx.files.internal("buttons/quitButtonHover.png"));
-		
-		ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
-		quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
-		quitButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(quitHoverTexture));
-		
+
+        // Quit Button
+        Texture quitTexture = new Texture(Gdx.files.internal("buttons/quitButton.png"));
+        Texture quitHoverTexture = new Texture(Gdx.files.internal("buttons/quitButtonHover.png"));
+        ImageButton.ImageButtonStyle quitButtonStyle = new ImageButton.ImageButtonStyle();
+        quitButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
+        quitButtonStyle.imageOver = new TextureRegionDrawable(new TextureRegion(quitHoverTexture));
         Texture quitClickTexture = new Texture(Gdx.files.internal("buttons/quitButtonClick.png"));
         quitButtonStyle.imageDown = new TextureRegionDrawable(new TextureRegion(quitClickTexture));
-		
-		ImageButton quitButton = new ImageButton(quitButtonStyle);
-
+        ImageButton quitButton = new ImageButton(quitButtonStyle);
         quitButton.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            	GameMaster.ioManager.playSound("buttonHover", 1.0f); // Hover sound xD
+                GameMaster.ioManager.playSound("buttonHover", 1.0f);
             }
-            
             @Override
             public void clicked(InputEvent event, float x, float y) {
-            	GameMaster.ioManager.playSound("buttonClick", 0.3f);
-
-                //Gdx.app.exit(); // Exit the application
+                GameMaster.ioManager.playSound("buttonClick", 0.3f);
+                // Exit the game after a short delay
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         Gdx.app.exit();
                     }
-                }, 0.4f); // Adjust delay as needed (0.3 seconds)
+                }, 0.4f);
             }
         });
 
+        // Place both buttons in the same layout as in the original code
         buttonTable.add(playAgainButton).size(200, 100).pad(10).padLeft(-20).padTop(-40);
         buttonTable.row();
         buttonTable.add(quitButton).size(200, 100).pad(10).padLeft(-120).padTop(-70);
+
+        // Optional: adjust the position of the entire button table if needed
         buttonTable.setPosition(buttonTable.getX() - 20, buttonTable.getY());
 
         return buttonTable;
     }
 
-    /** Adds a black horizontal line across the table, spanning colSpan columns. */
     private void addHorizontalLine(Table table, int colSpan) {
         table.row();
         Image line = new Image(blackTexture);
-        table.add(line).colspan(colSpan).growX().height(2);
+        // Use a smaller line height for the smaller table
+        table.add(line).colspan(colSpan).growX().height(1);
     }
 
     private List<String> loadScores() {
@@ -267,7 +259,6 @@ public class EndScene extends Scene {
             int scoreB = Integer.parseInt(b.split(",")[0]);
             return Integer.compare(scoreB, scoreA);
         });
-        // Keep only top 5
         return scores.size() > 5 ? scores.subList(0, 5) : scores;
     }
 
@@ -293,11 +284,9 @@ public class EndScene extends Scene {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         batch.begin();
         if (background != null) {
-            // Draw background to fill screen
             batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         batch.end();
-
         stage.act(delta);
         stage.draw();
     }
@@ -305,20 +294,12 @@ public class EndScene extends Scene {
     @Override
     public void dispose() {
         super.dispose();
-        if (background != null) {
-            background.dispose();
-        }
-        if (blackTexture != null) {
-            blackTexture.dispose();
-        }
+        if (background != null) background.dispose();
+        if (blackTexture != null) blackTexture.dispose();
     }
 
-    @Override
-    public void resize(int width, int height) {}
-    @Override
-    public void pause() {}
-    @Override
-    public void resume() {}
-    @Override
-    public void hide() {}
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }
