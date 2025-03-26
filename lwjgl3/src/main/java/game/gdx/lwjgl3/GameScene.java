@@ -63,13 +63,10 @@ public class GameScene extends Scene {
 		
 		 // Create equation label
 	    Label.LabelStyle equationStyle = new Label.LabelStyle();
-	    equationStyle.font = Mfont; // Use your preferred font
+	    equationStyle.font = Mfont;
 	    
 	    equationLabel = new Label("", equationStyle);
 
-	    
-	    currentEquation = EquationGeneratorFactory.randomGenerator();
-	    generateNewEquation();
 		// Labels for score and streak
 		BitmapFont streakFont = new BitmapFont();
 		streakFont.getData().setScale(0.5f);
@@ -138,53 +135,15 @@ public class GameScene extends Scene {
 			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
 					60, 60, 100, 2f);
 			
-	        boolean isCorrectMole = Math.random() < 0.25f; // 25% chance
-	        int moleAnswer = isCorrectMole ? currentEquation.getResult() : 
-	            generateWrongAnswer(currentEquation.getResult());
-	        
-	        io.setAnswerData(moleAnswer, isCorrectMole);
-	        activeMoles.add(io);
 			em.addEntity(io);
 			GameMaster.ioManager.playSound("entitySpawn1", 1.0f);
 			GameMaster.animManager.useTemplate(io, "mole_template");
 			io.setCurrentAnim("mole_popup");
 			tile.setOccupied(true);
-	        System.out.println("Spawned mole with answer: " + moleAnswer + 
-                    " for equation: " + currentEquation.generateEquation());
 			System.out.println("Spawned mole at (" + tile.getX() + ", " + tile.getY() + ")");
 		} else {
 			System.out.println("Tile occupied, skipping spawn");
 		}
-	}
-	private void generateNewEquation() {
-	    equationLabel.setPosition(
-	        Gdx.graphics.getWidth()/2 - 40, 
-	        Gdx.graphics.getHeight() - 100
-	    );
-	    currentEquation = EquationGeneratorFactory.randomGenerator();
-	    answer = currentEquation.getResult();
-	    equationLabel.setText(currentEquation.generateEquation());
-	}
-	
-	private int generateWrongAnswer(int correctAnswer) {
-	    Random rand = new Random();
-	    int wrongAnswer;
-	    do {
-	        wrongAnswer = correctAnswer + rand.nextInt(5) - 2;
-	    } while (wrongAnswer == correctAnswer || wrongAnswer <= 0);
-	    return wrongAnswer;
-	}
-	
-	public void checkPlayerAnswer(int playerAnswer) {
-	    if (playerAnswer == answer) {
-	        addPoints(10);
-	        equationLabel.setText("Correct.");
-	    } else {
-	        equationLabel.setText("Wrong. Answer was " + answer);
-	        resetStreak();
-	    }
-	    
-	    generateNewEquation();
 	}
 
 	public void addPoints(int pointsGained) {

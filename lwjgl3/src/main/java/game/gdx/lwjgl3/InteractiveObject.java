@@ -92,7 +92,7 @@ public class InteractiveObject extends Entity implements Collidable {
             float boxY = getY() + getHeight() + 5; 
             
             // Draw box
-            b.setColor(isCorrect ? Color.GREEN : Color.RED); // Color hint
+            b.setColor(isCorrect ? Color.GREEN : Color.RED);
             answerBox.draw(b, boxX, boxY, 50, 30);
             b.setColor(Color.WHITE);
             
