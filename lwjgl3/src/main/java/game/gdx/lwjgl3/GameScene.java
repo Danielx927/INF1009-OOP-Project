@@ -35,11 +35,7 @@ public class GameScene extends Scene {
 	private Label streakLabel;
 	private float elapsedTime = 0f;
 	private BitmapFont Cfont;
-	//Math
-	private EquationGenerator currentEquation;
 	private Label equationLabel;
-	private int answer;
-	private List<InteractiveObject> activeMoles = new ArrayList<>();
 	
 
 	public GameScene(GameMaster game) {
@@ -123,10 +119,6 @@ public class GameScene extends Scene {
 	}
 
 	private void spawnIO() {
-	    if (currentEquation == null) {
-	    	currentEquation = EquationGeneratorFactory.randomGenerator();
-	        return;
-	    }
 		int col_index = (int) (Math.random() * grid[0].length);
 		int row_index = (int) (Math.random() * grid.length);
 		GameTile tile = grid[row_index][col_index];
