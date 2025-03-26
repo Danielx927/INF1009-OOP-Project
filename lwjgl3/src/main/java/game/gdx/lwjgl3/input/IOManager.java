@@ -16,6 +16,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.badlogic.gdx.utils.Queue;
 
+import game.gdx.lwjgl3.GameMaster;
+import game.gdx.lwjgl3.GameScene;
 import game.gdx.lwjgl3.audio.MusicQueueItem;
 import game.gdx.lwjgl3.entity.Tool;
 
@@ -153,31 +155,35 @@ public class IOManager implements InputProcessor, Audio {
 	
 	public void handleInputs() {
         for (int i = 0; i < inputList.size(); i++) {
-        	InputEvent input = inputList.get(i);
-        	switch(input.getInputType()) {
-			case 0: // Keyboard event
-				// No keyboard events...
-				break;
-			case 1: // Mouse move event
-				if (tool != null) {
-					tool.setCoords(input.xPos, input.yPos);
-				}
-				break;
-			case 2: // Mouse click event
-				if (tool != null) {
-					tool.setCoords(input.xPos, input.yPos);
-					tool.clickEvent();
-				}
-				break;
-			case 3: // Mouse scroll
-				// No scroll events...
-				break;
-			}
-        	// Deletes the element from the list.
-			inputList.remove(i);
-			i--;
+            InputEvent input = inputList.get(i);
+            switch (input.getInputType()) {
+                case 0: // Keyboard event
+                    // No keyboard events...
+                    break;
+                case 1: // Mouse move event
+                    if (tool != null) {
+                        tool.setCoords(input.xPos, input.yPos);
+                    }
+                    break;
+                case 2: // Mouse click event
+                    if (tool != null && GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
+                        GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
+                        if (!gameScene.isPaused()) { // Only process clicks if not paused
+                            tool.setCoords(input.xPos, input.yPos);
+                            tool.clickEvent();
+                            GameMaster.collisionManager.notifyClick(); // Notify CollisionManager of a game click
+                        }
+                    }
+                    break;
+                case 3: // Mouse scroll
+                    // No scroll events...
+                    break;
+            }
+            // Deletes the element from the list.
+            inputList.remove(i);
+            i--;
         }
-	}
+    }
 
 	@Override
 	public AudioDevice newAudioDevice(int samplingRate, boolean isMono) {

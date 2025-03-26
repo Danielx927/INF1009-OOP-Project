@@ -1,116 +1,84 @@
 package game.gdx.lwjgl3;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 
 import game.gdx.lwjgl3.entity.Tool;
 
-import java.util.HashSet;
-
 public class CollisionManager {
     private World world;
     private Array<Body> bodies;
-    private ContactListener contactListener;
-    private Array<Collidable> collidedThisFrame;
-    private HashSet<String> collisionPairsThisFrame;
+    private Tool tool;
+    private boolean clickOccurred = false;
+    private Array<Collidable> moles; // To track all moles for onNoCollision
 
     public CollisionManager() {
         world = new World(new Vector2(0, 0), true);
         bodies = new Array<>();
-        collidedThisFrame = new Array<>();
-        collisionPairsThisFrame = new HashSet<>();
-        setupContactListener();
+        moles = new Array<>(); // Initialize list to track moles
     }
 
-    private void setupContactListener() {
-        contactListener = new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                Body bodyA = contact.getFixtureA().getBody();
-                Body bodyB = contact.getFixtureB().getBody();
-                
-                Object userDataA = bodyA.getUserData();
-                Object userDataB = bodyB.getUserData();
-
-                if (userDataA instanceof Collidable && userDataB instanceof Collidable) {
-                    Collidable collidableA = (Collidable) userDataA;
-                    Collidable collidableB = (Collidable) userDataB;
-                    
-                    String pairKey = Math.min(System.identityHashCode(collidableA), System.identityHashCode(collidableB)) + "_" +
-                                   Math.max(System.identityHashCode(collidableA), System.identityHashCode(collidableB));
-                    
-                    if (collisionPairsThisFrame.add(pairKey)) {
-                        collidableA.onCollision(collidableB);
-                        collidableB.onCollision(collidableA);
-                        collidedThisFrame.add(collidableA);
-                        collidedThisFrame.add(collidableB);
-                    }
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {}
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
-            
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
-        };
-        world.setContactListener(contactListener);
+    public void notifyClick() {
+        clickOccurred = true;
     }
 
     public void checkCollisions() {
-        if (Gdx.input.justTouched()) {
-            collidedThisFrame.clear();
-            collisionPairsThisFrame.clear();
+        // Step the world every frame to keep physics updated
+        world.step(1/60f, 6, 2);
 
-            world.step(1/60f, 6, 2);
+        if (clickOccurred) {
+            clickOccurred = false; // Reset flag after processing
+            if (tool != null) {
+                // Define AABB for the tool's area (assuming getX(), getY() are bottom-left)
+                float minX = tool.getX();
+                float minY = tool.getY();
+                float maxX = tool.getX() + tool.getWidth();
+                float maxY = tool.getY() + tool.getHeight();
 
+                // Query for bodies overlapping the tool's area
+                Array<Body> overlappingBodies = new Array<>();
+                world.QueryAABB(fixture -> {
+                    Body body = fixture.getBody();
+                    // Include bodies that are InteractiveObjects (moles) and exclude the tool itself
+                    if (body != tool.getBody() && body.getUserData() instanceof InteractiveObject) {
+                        overlappingBodies.add(body);
+                    }
+                    return true; // Continue querying
+                }, minX, minY, maxX, maxY);
+
+                // Process overlaps (hit moles)
+                Array<Collidable> hitMoles = new Array<>();
+                for (Body body : overlappingBodies) {
+                    Collidable mole = (Collidable) body.getUserData();
+                    tool.onCollision(mole); // Hammer hits mole
+                    mole.onCollision(tool); // Mole reacts to hammer
+                    hitMoles.add(mole);
+                }
+
+                // Notify non-hit moles with onNoCollision
+                for (Collidable mole : moles) {
+                    if (!hitMoles.contains(mole, true)) {
+                        mole.onNoCollision();
+                    }
+                }
+
+                // If no overlaps, reset the streak
+                if (overlappingBodies.isEmpty() && GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
+                    GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
+                    System.out.println("Missed! Resetting streak due to hammer miss.");
+                    gameScene.resetStreak();
+                }
+            }
+
+            // Update positions for all collidables
             Array<Body> currentBodies = new Array<>();
             world.getBodies(currentBodies);
-
-            // Update positions
             for (Body body : currentBodies) {
                 Object userData = body.getUserData();
                 if (userData instanceof Collidable) {
                     Collidable collidable = (Collidable) userData;
                     collidable.updatePosition();
-                }
-            }
-
-            // Check if the Tool collided with anything
-            boolean toolHitSomething = false;
-            Tool tool = null;
-            for (Body body : currentBodies) {
-                Object userData = body.getUserData();
-                if (userData instanceof Tool) {
-                    tool = (Tool) userData;
-                }
-                if (userData instanceof Collidable && collidedThisFrame.contains((Collidable) userData, true)) {
-                    if (userData instanceof Tool) {
-                        toolHitSomething = true; // Tool hit something
-                    }
-                }
-            }
-
-            // If the Tool didn't hit anything, reset the streak
-            if (tool != null && !toolHitSomething && GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
-                GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-                System.out.println("Missed! Resetting streak due to hammer miss.");
-                gameScene.resetStreak();
-            }
-
-            // Notify non-collided entities
-            for (Body body : currentBodies) {
-                Object userData = body.getUserData();
-                if (userData instanceof Collidable) {
-                    Collidable collidable = (Collidable) userData;
-                    if (!collidedThisFrame.contains(collidable, true)) {
-                        collidable.onNoCollision();
-                    }
                 }
             }
         }
@@ -134,9 +102,11 @@ public class CollisionManager {
         if (c instanceof Tool) {
             fixtureDef.filter.categoryBits = 0x0001;
             fixtureDef.filter.maskBits = 0x0002;
+            this.tool = (Tool) c; // Store the tool instance
         } else if (c instanceof InteractiveObject) {
             fixtureDef.filter.categoryBits = 0x0002;
             fixtureDef.filter.maskBits = 0x0001;
+            moles.add(c); // Add to moles list for onNoCollision
         }
 
         body.createFixture(fixtureDef);
@@ -150,6 +120,11 @@ public class CollisionManager {
                 world.destroyBody(body);
                 bodies.removeValue(body, true);
                 c.setBody(null);
+                if (c instanceof Tool) {
+                    this.tool = null; // Clear tool reference if removed
+                } else if (c instanceof InteractiveObject) {
+                    moles.removeValue(c, true); // Remove from moles list
+                }
                 break;
             }
         }
@@ -160,8 +135,7 @@ public class CollisionManager {
             world.dispose();
         }
         bodies.clear();
-        collidedThisFrame.clear();
-        collisionPairsThisFrame.clear();
+        moles.clear();
         world = null;
     }
 
