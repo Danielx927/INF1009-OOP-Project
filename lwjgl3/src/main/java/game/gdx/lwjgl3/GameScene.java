@@ -261,11 +261,11 @@ public class GameScene extends Scene {
 				(Gdx.graphics.getHeight() - endSceneButton.getHeight()) / 2);
 
 		endSceneButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				GameMaster.sceneManager.setScene(new EndScene(game, points, elapsedTime));
-
-			}
+		    @Override
+		    public void clicked(InputEvent event, float x, float y) {
+		        // Use timeElapsed here instead of elapsedTime
+		        GameMaster.sceneManager.setScene(new EndScene(game, points, timeElapsed));
+		    }
 		});
 
 		pauseMenu.addActor(resumeButton);
