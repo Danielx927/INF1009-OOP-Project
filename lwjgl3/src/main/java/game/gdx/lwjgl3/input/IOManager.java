@@ -65,7 +65,12 @@ public class IOManager implements InputProcessor, Audio {
 		Sound damageTaken1 = this.newSound(Gdx.files.internal("sounds/damage_taken1.mp3"));
 		Sound buttonHover = this.newSound(Gdx.files.internal("sounds/button_hover.mp3"));
 		Sound buttonClick = this.newSound(Gdx.files.internal("sounds/button_click.mp3"));
+		Sound hitWrong = this.newSound(Gdx.files.internal("sounds/mole_hit_wrong.mp3"));
+		Sound hitCorrect = this.newSound(Gdx.files.internal("sounds/mole_hit_correct.mp3"));
 
+		
+		soundEffects.put("wrong", hitWrong); // hit wrong
+		soundEffects.put("correct", hitCorrect); // hit correct
 		soundEffects.put("buttonHover", buttonHover); // button hover
 		soundEffects.put("buttonClick", buttonClick); // button click
 		soundEffects.put("damageTaken1", damageTaken1); // yet to be used

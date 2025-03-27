@@ -1,6 +1,5 @@
 package game.gdx.lwjgl3;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import game.gdx.lwjgl3.entity.Tool;
@@ -33,20 +32,6 @@ public class InteractiveObject extends Entity implements Collidable {
     // Decrease lifetime (for CollisionManager to update each frame)
     public void decreaseTime(float delta) {
         lifeTime += delta;
-    }
-
-    @Override
-    public void render(SpriteBatch b) {
-        if (getCurrentAnim() != null) {
-            if (getCurrentAnim().isAnimationFinished()) {
-                setCurrentAnimFinished();
-                b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
-            } else {
-                getCurrentAnim().render(b, this, false);
-            }
-        } else {
-            b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
-        }
     }
 
     @Override
@@ -89,6 +74,7 @@ public class InteractiveObject extends Entity implements Collidable {
 
     @Override
     public void onCollision(Collidable other) {
+
         if (other instanceof Tool) {
             System.out.println("Hit!");
             wasHit = true;
@@ -104,7 +90,6 @@ public class InteractiveObject extends Entity implements Collidable {
 
     @Override
     public void onNoCollision() {
-        System.out.println("❌ InteractiveObject at (" + getX() + ", " + getY() + ") was NOT hit.");
     }
 
     @Override

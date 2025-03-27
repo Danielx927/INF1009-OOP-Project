@@ -61,12 +61,12 @@ public class Mole extends InteractiveObject {
         if (getCurrentAnim() != null) {
             if (getCurrentAnim().isAnimationFinished()) {
                 setCurrentAnimFinished();
-                b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
+                b.draw(getTextureRegion(), getX(), getY(), getWidth(), getHeight());
             } else {
                 getCurrentAnim().render(b, this, false);
             }
         } else {
-            b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
+            b.draw(getTextureRegion(), getX(), getY(), getWidth(), getHeight());
         }
         if (assignedAnswer >= 0) {
             float boxX = getX() + getWidth() / 2 - 25;

@@ -33,7 +33,7 @@ public class GameMaster extends Game {
         new IOManager();
         ioManager = IOManager.getInstance();
         ioManager.addTool(hammer);
-        
+        collisionManager.setTool(hammer);       
         // If you have a stage (e.g., for UI like pause button), use InputMultiplexer
         // Otherwise, keep it as is
         InputMultiplexer multiplexer = new InputMultiplexer();
