@@ -72,8 +72,6 @@ public class MainMenuScene extends Scene {
 		startButtonStyle.imageDown = playClick;
 
 		ImageButton startButton = new ImageButton(startButtonStyle);
-		// startButton.setSize(300, 200);
-		// startButton.setPosition(410, 90);
 		startButton.getImageCell().size(buttonWidth, buttonHeight);
 
 		// Quit button texture region drawables
@@ -92,8 +90,6 @@ public class MainMenuScene extends Scene {
 		quitButtonStyle.imageDown = quitClick;
 
 		ImageButton quitButton = new ImageButton(quitButtonStyle);
-		// quitButton.setSize(300, 200);
-		// quitButton.setPosition(410, 20);
 		quitButton.getImageCell().size(buttonWidth, buttonHeight);
 
 		startButton.addListener(new ClickListener() {
@@ -133,8 +129,6 @@ public class MainMenuScene extends Scene {
 		buttonTable.row();
 		buttonTable.add(quitButton).size(buttonWidth, buttonHeight).padTop(quitPadTop + globalMarginY).padLeft(quitPadLeft + globalMarginX);
 
-		//stage.addActor(startButton);
-		//stage.addActor(quitButton);
 		stage.addActor(buttonTable);
 
 	}
