@@ -1,10 +1,5 @@
  package game.gdx.lwjgl3;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
@@ -33,7 +28,6 @@ public class GameScene extends Scene implements CollisionListener{
 	private int streak = 0;
 	private Label scoreLabel;
 	private Label streakLabel;
-	private float elapsedTime = 0f;
 	private BitmapFont Cfont;
 	private Label equationLabel;
 	private int correctAnswer;
@@ -135,7 +129,7 @@ public class GameScene extends Scene implements CollisionListener{
 		GameTile tile = grid[row_index][col_index];
 		System.out.println("Checking tile at (" + row_index + ", " + col_index + "), occupied: " + tile.getOccupied());
 		if (!tile.getOccupied()) {
-			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
+			Mole io = new Mole("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
 					60, 60, 100, 5f);
 			// Randomly decide whether to show set correct answer or wrong answer to mole (30% chance)
 			int valueToSet = Math.random() > 0.7 ? correctAnswer : correctAnswer + (int)(Math.random() * 10); 
@@ -202,7 +196,7 @@ public class GameScene extends Scene implements CollisionListener{
 	
 	@Override
 	public void onMoleHit(Collidable mole) {
-	    if (mole instanceof InteractiveObject io) {
+	    if (mole instanceof Mole io) {
 	        if (io.isCorrect()) {
 	            int awarded = getPointsToAward(100);
 	            addPoints(awarded);
@@ -225,10 +219,13 @@ public class GameScene extends Scene implements CollisionListener{
 	}
 
 	@Override
-	public void onMoleExpired(InteractiveObject io) {
+	public void onMoleExpired(Mole io) {
 	    clearTileForObject(io);
 	    em.removeEntity(io);
-	    GameMaster.heartSystem.decreaseHeart();
+	    // Only decrease heart when mole with correct answer expires
+	    if (io.isCorrect()) {
+	    	GameMaster.heartSystem.decreaseHeart();
+	    }
 	}
 
 

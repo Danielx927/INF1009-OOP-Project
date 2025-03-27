@@ -353,36 +353,17 @@ public class EndScene extends Scene {
 		background = new Texture(Gdx.files.internal(bgPath));
 	}
 
-	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		float screenWidth = Gdx.graphics.getWidth();
-		float screenHeight = Gdx.graphics.getHeight();
-
-		float bgWidth = 640;
-		float bgHeight = 480;
-
-		if (Gdx.graphics.isFullscreen()) {
-			float scale = Math.max(screenWidth / bgWidth, screenHeight / bgHeight);
-			float scaledWidth = bgWidth * scale;
-			float scaledHeight = bgHeight * scale;
-
-			float x = (screenWidth - scaledWidth) / 2;
-			float y = (screenHeight - scaledHeight) / 2;
-
-			batch.begin();
-			batch.draw(background, x, y, scaledWidth, scaledHeight);
-			batch.end();
-
-		} else {
-			// Keep manual size when not fullscreen
-			batch.begin();
-			batch.draw(background, 0, 0, bgWidth, bgHeight);
-			batch.end();
-		}
-		stage.act(delta);
-		stage.draw();
-	}
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        batch.begin();
+        if (background != null) {
+            batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+        batch.end();
+        stage.act(delta);
+        stage.draw();
+    }
 
 	@Override
 	public void dispose() {
