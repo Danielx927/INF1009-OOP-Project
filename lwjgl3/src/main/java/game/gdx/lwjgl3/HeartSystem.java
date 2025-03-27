@@ -15,7 +15,7 @@ public class HeartSystem extends Entity {
     public HeartSystem() {
         super("sprites/heartPH.png", 0, 0); // Dummy position
         currentHearts = maxHearts;
-        heartTexture = getTexture(); // Use texture from Entity
+        heartTexture = getTextureRegion().getTexture(); // Use texture from Entity
         heartSprites = new Array<>();
 
         for (int i = 0; i < maxHearts; i++) {
