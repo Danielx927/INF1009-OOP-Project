@@ -296,6 +296,10 @@ public class GameScene extends Scene {
 
 	@Override
 	public void render(float delta) {
+		if (GameMaster.heartSystem.isGameOver()) {
+	        GameMaster.sceneManager.setScene(new EndScene(game, points, timeElapsed));
+	        return;
+	    }
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

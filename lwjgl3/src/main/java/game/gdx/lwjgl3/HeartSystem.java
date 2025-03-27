@@ -41,6 +41,10 @@ public class HeartSystem {
             }
         }
     }
+    
+    public boolean isGameOver() {
+        return currentHearts <= 0;
+    }
 
     public void render(SpriteBatch batch) {
         for (Sprite heart : heartSprites) {
