@@ -2,6 +2,7 @@
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,8 +17,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class GameScene extends Scene implements CollisionListener{
 	protected GameMaster game;
 	private float spawnTimer = 0f;
-	private float spawnInterval = 2f;
-	private float minSpawnInterval = 0.5f;
+	private float spawnInterval = 4f;
+	private float minSpawnInterval = 2f;
 	private float timeElapsed = 0f;
 	private GameTile[][] grid;
 	private EntityManager em;
@@ -30,6 +31,9 @@ public class GameScene extends Scene implements CollisionListener{
 	private Label streakLabel;
 	private BitmapFont Cfont;
 	private Label equationLabel;
+	private Label operand1;
+	private Label operand2;
+	private Label operator;
 	private int correctAnswer;
 	private EquationGenerator equationGenerator;
 	
@@ -52,13 +56,18 @@ public class GameScene extends Scene implements CollisionListener{
 		// Math equation font
 		BitmapFont Mfont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
 				Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
-		Mfont.getData().setScale(0.4f);
+		Mfont.getData().setScale(0.45f);
 		
 		 // Create equation label
 	    Label.LabelStyle equationStyle = new Label.LabelStyle();
 	    equationStyle.font = Mfont;
+	    equationStyle.fontColor = Color.WHITE;
 	    
-	    equationLabel = new Label("99", equationStyle);
+	    operand1 = new Label("", equationStyle);
+	    operand2 = new Label("", equationStyle);
+	    operator = new Label("", equationStyle);
+	    
+	    equationLabel = new Label("", equationStyle);
 
 		// Labels for score and streak
 		BitmapFont streakFont = new BitmapFont();
@@ -92,6 +101,9 @@ public class GameScene extends Scene implements CollisionListener{
 		stage.addActor(pauseButton);
 		stage.addActor(scoreLabel);
 		stage.addActor(streakLabel);
+		stage.addActor(operand1);
+		stage.addActor(operand2);
+		stage.addActor(operator);
 		stage.addActor(equationLabel);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
@@ -105,18 +117,23 @@ public class GameScene extends Scene implements CollisionListener{
             scoreLabel.getX() - 70,
             scoreLabel.getY() - 90
         );
+        
+        // Set Position for Equation
+	    operand1.setPosition(Gdx.graphics.getWidth() / 2 - 45, scoreLabel.getY() - 5);
+	    operator.setPosition(Gdx.graphics.getWidth() / 2 - 10, scoreLabel.getY() - 5);
+	    operand2.setPosition(Gdx.graphics.getWidth() / 2 + 25, scoreLabel.getY() - 5);
 	}
 
 	private void generateGrid() {
 		int gridRows = 3, gridCols = 3;
 		grid = new GameTile[gridRows][gridCols];
 
-		int leftMargin = 170, bottomMargin = 60;
+		int leftMargin = 150, bottomMargin = 60;
 		int gameTileWH = 80;
 
 		for (int row = 0; row < gridRows; row++) {
 			for (int col = 0; col < gridCols; col++) {
-				grid[row][col] = new GameTile("sprites/yellow_circle.png", leftMargin + 110 * col,
+				grid[row][col] = new GameTile("sprites/yellow_circle.png", leftMargin + 130 * col,
 						bottomMargin + 90 * row, gameTileWH, gameTileWH, false);
 				em.addEntity(grid[row][col]);
 			}
@@ -130,7 +147,7 @@ public class GameScene extends Scene implements CollisionListener{
 		System.out.println("Checking tile at (" + row_index + ", " + col_index + "), occupied: " + tile.getOccupied());
 		if (!tile.getOccupied()) {
 			Mole io = new Mole("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
-					60, 60, 100, 5f);
+					60, 60, 100, 4f);
 			// Randomly decide whether to show set correct answer or wrong answer to mole (30% chance)
 			int valueToSet = Math.random() > 0.7 ? correctAnswer : correctAnswer + (int)(Math.random() * 10); 
 			if (valueToSet == correctAnswer) {
@@ -181,7 +198,7 @@ public class GameScene extends Scene implements CollisionListener{
 		updateScoreLabel();
 	}
 
-	public void clearTileForObject(InteractiveObject io) {
+	public void clearTileForObject(Mole io) {
 		for (int row = 0; row < grid.length; row++) {
 			for (int col = 0; col < grid[0].length; col++) {
 				GameTile tile = grid[row][col];
@@ -261,12 +278,14 @@ public class GameScene extends Scene implements CollisionListener{
 	
 	public void refreshEquation() {
 		equationGenerator = EquationGeneratorFactory.randomGenerator();
-		String strEquation = equationGenerator.generateEquation();
+		equationGenerator.generateEquation();
 		correctAnswer = equationGenerator.getResult();
 		
 		// Update label if exists
-		if (equationLabel != null) {
-			equationLabel.setText(strEquation);
+		if (operand1 != null && operand2 != null && operator != null) {
+			operand1.setText(equationGenerator.getOperand1());
+			operand2.setText(equationGenerator.getOperand2());
+			operator.setText(equationGenerator.getOperator());
 		}
 	}
 

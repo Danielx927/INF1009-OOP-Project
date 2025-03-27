@@ -20,9 +20,32 @@ public abstract class MathEquationGenerator implements EquationGenerator{
 		return operand1 + " " + getOperator() + " " + operand2 + " = ?";
 	}
 	
+	
 	@Override
 	public int getResult() {
-		return calculateResult();
+		int result = calculateResult();
+		return result;
+	}
+	
+	@Override
+	public int getOperand1() {
+		return operand1;
+	}
+	
+	@Override
+	public int getOperand2() {
+		return operand2;
+	}
+	
+	@Override
+	public String getOperator() {
+		switch(equationType.toLowerCase()) {
+		case "addition": return "+";
+		case "subtraction": return "-";
+		case "multiplication": return "x";
+		case "division": return "/";
+		default: return "";
+	}
 	}
 	
 	protected void generateOperands() {
@@ -30,21 +53,4 @@ public abstract class MathEquationGenerator implements EquationGenerator{
 		operand2 = random.nextInt(10) + 1;
  	}
 	
-	public int getOperand1() {
-		return operand1;
-	}
-	
-	public int getOperand2() {
-		return operand2;
-	}
-	
-	protected String getOperator() {
-		switch(equationType.toLowerCase()) {
-			case "addition": return "+";
-			case "subtraction": return "-";
-			case "multiplication": return "x";
-			case "division": return "/";
-			default: return "";
-		}
-	}
 }

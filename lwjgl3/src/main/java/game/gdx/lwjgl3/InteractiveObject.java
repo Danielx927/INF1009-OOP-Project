@@ -15,7 +15,7 @@ public class InteractiveObject extends Entity implements Collidable {
     public InteractiveObject(String t, float x, float y, float w, float h, float d) {
         super(t, x, y, w, h);
         this.body = null;
-        maxLifeTime = d; // Set maximum lifetime (e.g., 5f from GameScene)
+        maxLifeTime = d; // Set maximum lifetime (e.g., 4f from GameScene)
         lifeTime = 0; // Start at 0, increases with delta time
     }
 

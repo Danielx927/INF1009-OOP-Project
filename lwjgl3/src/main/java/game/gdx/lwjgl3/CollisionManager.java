@@ -59,7 +59,7 @@ public class CollisionManager {
 
                 Array<Collidable> hitMoles = new Array<>();
                 for (Body body : overlappingBodies) {
-                    if (body != tool.getBody() && body.getUserData() instanceof InteractiveObject) {
+                    if (body != tool.getBody() && body.getUserData() instanceof Mole) {
                         Collidable mole = (Collidable) body.getUserData();
                         tool.onCollision(mole);
                         mole.onCollision(tool);
@@ -102,7 +102,7 @@ public class CollisionManager {
         physicsManager.removeBody(c);
         if (c instanceof Tool) {
             this.tool = null;
-        } else if (c instanceof InteractiveObject) {
+        } else if (c instanceof Mole) {
             moles.removeValue(c, true);
         }
     }

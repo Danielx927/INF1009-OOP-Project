@@ -29,7 +29,7 @@ public class Mole extends InteractiveObject {
 
         answerFont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
                 Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
-        answerFont.getData().setScale(0.5f);
+        answerFont.getData().setScale(0.6f);
         answerFont.setColor(Color.WHITE);
 
         isCorrect = true;
@@ -68,7 +68,7 @@ public class Mole extends InteractiveObject {
         } else {
             b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
         }
-        if (assignedAnswer != 0) {
+        if (assignedAnswer >= 0) {
             float boxX = getX() + getWidth() / 2 - 25;
             float boxY = getY() + getHeight() + 5;
 
@@ -83,7 +83,6 @@ public class Mole extends InteractiveObject {
                     boxY + 20 + layout.height / 2);
         }
     }
-    
     @Override
     public void dispose() {
         super.dispose();

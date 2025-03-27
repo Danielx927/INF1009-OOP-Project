@@ -38,19 +38,19 @@ public class EntityManager {
         List<Entity> ioToRemove = new ArrayList<>();
 
         for (Entity e : entityList) {
-            if (e instanceof InteractiveObject) {
-                InteractiveObject obj = (InteractiveObject) e;
+            if (e instanceof Mole) {
+            	Mole obj = (Mole) e;
                 if (!obj.isActive(delta)) { // Updates lifeTime and checks expiration
                     ioToRemove.add(obj);
-                    if (gameScene != null && !obj.wasHit) {
-                        // Mole timed out without being hit
+                    // If mole with correct answer timed out
+                    if (gameScene != null && !obj.wasHit && obj.isCorrect()) { 
                         System.out.println("Mole timed out! Losing a heart and resetting streak.");
                         if (GameMaster.heartSystem.getCurrentHearts() > 0) { // Ensure heart decreases only if available
                             GameMaster.heartSystem.decreaseHeart();
                         }
                         gameScene.resetStreak();
-                        gameScene.clearTileForObject(obj);
                     }
+                    gameScene.clearTileForObject(obj);
                 }
             }
         }
