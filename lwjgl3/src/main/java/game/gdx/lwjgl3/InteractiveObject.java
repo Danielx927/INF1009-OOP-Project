@@ -153,11 +153,16 @@ public class InteractiveObject extends Entity implements Collidable {
             IOManager.getInstance().playHitSound();
             if (GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
                 GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-                int pointsToAward = gameScene.getPointsToAward(this.points);
-                System.out.println("Adding points with streak " + gameScene.getStreak() + ": " + pointsToAward);
-                gameScene.addPoints(pointsToAward);
-                // Fix: Clear the tile immediately when hit
-                gameScene.clearTileForObject(this);
+                // If mole with correct answer hit
+                if (this.isCorrect) {	
+		            int pointsToAward = gameScene.getPointsToAward(this.points);
+		            System.out.println("Adding points with streak " + gameScene.getStreak() + ": " + pointsToAward);
+		            gameScene.addPoints(pointsToAward);
+		            // Refresh equation
+		            gameScene.refreshEquation();
+		            // Fix: Clear the tile immediately when hit
+		            gameScene.clearTileForObject(this);
+                } 
             }
         }
     }

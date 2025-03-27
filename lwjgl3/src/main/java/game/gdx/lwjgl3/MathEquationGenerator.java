@@ -30,6 +30,14 @@ public abstract class MathEquationGenerator implements EquationGenerator{
 		operand2 = random.nextInt(10) + 1;
  	}
 	
+	public int getOperand1() {
+		return operand1;
+	}
+	
+	public int getOperand2() {
+		return operand2;
+	}
+	
 	protected String getOperator() {
 		switch(equationType.toLowerCase()) {
 			case "addition": return "+";

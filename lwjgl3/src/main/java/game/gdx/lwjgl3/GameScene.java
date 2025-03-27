@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+ package game.gdx.lwjgl3;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +36,8 @@ public class GameScene extends Scene {
 	private float elapsedTime = 0f;
 	private BitmapFont Cfont;
 	private Label equationLabel;
+	private int correctAnswer;
+	private EquationGenerator equationGenerator;
 	
 
 	public GameScene(GameMaster game) {
@@ -61,7 +63,7 @@ public class GameScene extends Scene {
 	    Label.LabelStyle equationStyle = new Label.LabelStyle();
 	    equationStyle.font = Mfont;
 	    
-	    equationLabel = new Label("", equationStyle);
+	    equationLabel = new Label("99", equationStyle);
 
 		// Labels for score and streak
 		BitmapFont streakFont = new BitmapFont();
@@ -90,7 +92,8 @@ public class GameScene extends Scene {
 				pause();
 			}
 		});
-
+		
+		refreshEquation();
 		stage.addActor(pauseButton);
 		stage.addActor(scoreLabel);
 		stage.addActor(streakLabel);
@@ -125,7 +128,14 @@ public class GameScene extends Scene {
 		System.out.println("Checking tile at (" + row_index + ", " + col_index + "), occupied: " + tile.getOccupied());
 		if (!tile.getOccupied()) {
 			InteractiveObject io = new InteractiveObject("sprites/black_square.png", tile.getX() + 10, tile.getY() + 10,
-					60, 60, 100, 2f);
+					60, 60, 100, 5f);
+			// Randomly decide whether to show set correct answer or wrong answer to mole (30% chance)
+			int valueToSet = Math.random() > 0.7 ? correctAnswer : correctAnswer + (int)(Math.random() * 10); 
+			if (valueToSet == correctAnswer) {
+				io.setAnswerData(valueToSet, true);
+			} else {
+				io.setAnswerData(valueToSet, false);
+			}
 			
 			em.addEntity(io);
 			GameMaster.ioManager.playSound("entitySpawn1", 1.0f);
@@ -204,6 +214,17 @@ public class GameScene extends Scene {
 	    scoreLabel.setPosition(Gdx.graphics.getWidth() - 105, Gdx.graphics.getHeight() - 90);
 	    streakLabel.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 480);
 	
+	}
+	
+	public void refreshEquation() {
+		equationGenerator = EquationGeneratorFactory.randomGenerator();
+		String strEquation = equationGenerator.generateEquation();
+		correctAnswer = equationGenerator.getResult();
+		
+		// Update label if exists
+		if (equationLabel != null) {
+			equationLabel.setText(strEquation);
+		}
 	}
 
 	@Override
@@ -286,6 +307,7 @@ public class GameScene extends Scene {
 		String timeText = String.format("%.2f", timeElapsed);
 		Cfont.draw(batch, timeText, 10, Gdx.graphics.getHeight() - 40);
 		batch.end();
+		
 
 		if (!isPaused) {
 			timeElapsed += delta;
