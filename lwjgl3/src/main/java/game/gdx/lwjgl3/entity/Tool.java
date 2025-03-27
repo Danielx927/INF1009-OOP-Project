@@ -1,9 +1,8 @@
 package game.gdx.lwjgl3.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -22,7 +21,7 @@ public class Tool extends Entity implements Collidable {
         super(t, x, y);
         this.cooldown = 0;
         this.body = null;
-        this.setSprite(super.getTexture());
+        this.setSprite(super.getTextureRegion());
     }
 
     // Called everytime mouse is moved, clicked
@@ -47,8 +46,8 @@ public class Tool extends Entity implements Collidable {
         return this.sprite;
     }
 
-    public void setSprite(Texture t) {
-        this.sprite = new Sprite(t, t.getWidth(), t.getHeight());
+    public void setSprite(TextureRegion t) {
+        this.sprite = new Sprite(t);
         this.sprite.setPosition(getX(), getY());
     }
 
@@ -62,21 +61,6 @@ public class Tool extends Entity implements Collidable {
 
     public void clickEvent() {
         IOManager.getInstance().playSound("defaultClick", 1f);
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-        if (this.getCurrentAnim() != null) {
-            if (this.getCurrentAnim().isAnimationFinished()) {
-                this.getCurrentAnim().reset();
-                this.setCurrentAnimFinished();
-                sprite.draw(batch);
-            } else {
-                this.getCurrentAnim().render(batch, this, false);
-            }
-        } else {
-            sprite.draw(batch);
-        }
     }
 
     @Override

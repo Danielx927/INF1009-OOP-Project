@@ -5,20 +5,22 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import game.gdx.lwjgl3.animation.SpriteAnimation;
 
 public abstract class Entity {
     private float x;
     private float y;
-    private Texture texture;
+    private TextureRegion textureRegion;
     private float width;
     private float height;
     private HashMap<String, SpriteAnimation> animTemplate;
     private SpriteAnimation currentAnim;
 
     public Entity(String t, float x, float y, float w, float h) {
-        texture = new Texture(Gdx.files.internal(t));
+    	Texture texture = new Texture(Gdx.files.internal(t));
+    	textureRegion = new TextureRegion(texture);
         this.x = x;
         this.y = y;
         width = w;
@@ -27,11 +29,12 @@ public abstract class Entity {
     }
 
     public Entity(String t, float x, float y) {
-        texture = new Texture(Gdx.files.internal(t));
-        this.x = x;
+//    	Texture texture = new Texture(Gdx.files.internal(t));
+    	textureRegion = new TextureRegion(new Texture(Gdx.files.internal(t)));        
+    	this.x = x;
         this.y = y;
-        width = texture.getWidth();
-        height = texture.getHeight();
+        width = textureRegion.getRegionWidth();
+        height = textureRegion.getRegionHeight();
         animTemplate = new HashMap<String, SpriteAnimation>();
     }
 
@@ -51,12 +54,15 @@ public abstract class Entity {
         this.y = y;
     }
 
-    public Texture getTexture() {
-        return texture;
+    public TextureRegion getTextureRegion() {
+        return textureRegion;
     }
 
     public void setTexture(String t) {
-        texture = new Texture(Gdx.files.internal(t));
+    	 if (textureRegion != null && textureRegion.getTexture() != null) {
+             textureRegion.getTexture().dispose();
+         }
+         this.textureRegion = new TextureRegion(new Texture(Gdx.files.internal(t)));
     }
 
     public float getWidth() {
@@ -93,11 +99,30 @@ public abstract class Entity {
     }
 
     public void dispose() {
-        if (texture != null) {
-            texture.dispose();
+    	if (textureRegion != null && textureRegion.getTexture() != null) {
+            textureRegion.getTexture().dispose();
         }
         animTemplate.clear();
     }
 
-    public abstract void render(SpriteBatch b);
+    public void render(SpriteBatch batch) {
+        if (currentAnim != null) {
+            if (currentAnim.isAnimationFinished()) {
+                currentAnim.reset();
+                setCurrentAnimFinished();
+                drawEntity(batch);
+            } else {
+                currentAnim.render(batch, this, false);
+            }
+        } else {
+            drawEntity(batch);
+        }
+    }
+    
+    public void drawEntity(SpriteBatch batch) {
+        batch.draw(textureRegion, x, y, width, height);
+    }
+
+    
+    
 }
