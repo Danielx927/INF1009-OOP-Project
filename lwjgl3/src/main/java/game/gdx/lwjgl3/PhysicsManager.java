@@ -3,6 +3,7 @@ package game.gdx.lwjgl3;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import game.gdx.lwjgl3.entity.Tool;
 
 public class PhysicsManager {
     private World world;
@@ -27,7 +28,19 @@ public class PhysicsManager {
         c.setBody(body);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(c.getWidth() / 2f, c.getHeight() / 2f);
+
+        if (c instanceof Tool) {
+            // 🔧 Adjust hitbox for Tool (e.g., hammer)
+            float scale = 0.4f; // 40% of original size
+            float width = (c.getWidth() * scale) / 2f;
+            float height = (c.getHeight() * scale) / 2f;
+
+            Vector2 offset = new Vector2(0, -5f); // Optional: shift hitbox slightly downward
+            shape.setAsBox(width, height, offset, 0f);
+        } else {
+            // Default hitbox for other entities
+            shape.setAsBox(c.getWidth() / 2f, c.getHeight() / 2f);
+        }
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

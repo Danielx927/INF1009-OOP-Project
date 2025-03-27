@@ -151,24 +151,10 @@ public class InteractiveObject extends Entity implements Collidable {
 
     @Override
     public void onCollision(Collidable other) {
-        if (other instanceof Tool) {
-            System.out.println("Hit!");
-            wasHit = true;
-            lifeTime = maxLifeTime; // Mark for immediate removal
-            IOManager.getInstance().playHitSound();
-            if (GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
-                GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-
-                wasHit = true;
-                lifeTime = maxLifeTime;
-                IOManager.getInstance().playHitSound();
-            }
-        }
     }
 
     @Override
     public void onNoCollision() {
-        System.out.println("❌ InteractiveObject at (" + getX() + ", " + getY() + ") was NOT hit.");
     }
 
     @Override
