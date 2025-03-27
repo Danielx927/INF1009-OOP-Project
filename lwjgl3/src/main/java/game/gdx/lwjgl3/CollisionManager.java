@@ -1,5 +1,6 @@
 package game.gdx.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -24,54 +25,64 @@ public class CollisionManager {
     }
 
     public void checkCollisions() {
-        // Step the world every frame to keep physics updated
         world.step(1/60f, 6, 2);
 
+        // Check mole timeouts
+        for (int i = moles.size - 1; i >= 0; i--) {
+            Collidable mole = moles.get(i);
+            if (mole instanceof InteractiveObject) {
+                InteractiveObject io = (InteractiveObject) mole;
+                io.decreaseTime(Gdx.graphics.getDeltaTime());
+                if (io.getTimeLeft() <= 0) {
+                    System.out.println("Mole timed out! Losing a heart.");
+                    if (GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
+                        GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
+                        gameScene.onMoleExpired(io); // Call GameScene method
+                    }
+                    removeCollidable(mole);
+                }
+            }
+        }
+
         if (clickOccurred) {
-            clickOccurred = false; // Reset flag after processing
+            clickOccurred = false;
             if (tool != null) {
-                // Define AABB for the tool's area (assuming getX(), getY() are bottom-left)
                 float minX = tool.getX();
                 float minY = tool.getY();
                 float maxX = tool.getX() + tool.getWidth();
                 float maxY = tool.getY() + tool.getHeight();
 
-                // Query for bodies overlapping the tool's area
                 Array<Body> overlappingBodies = new Array<>();
                 world.QueryAABB(fixture -> {
                     Body body = fixture.getBody();
-                    // Include bodies that are InteractiveObjects (moles) and exclude the tool itself
                     if (body != tool.getBody() && body.getUserData() instanceof InteractiveObject) {
                         overlappingBodies.add(body);
                     }
-                    return true; // Continue querying
+                    return true;
                 }, minX, minY, maxX, maxY);
 
-                // Process overlaps (hit moles)
                 Array<Collidable> hitMoles = new Array<>();
                 for (Body body : overlappingBodies) {
                     Collidable mole = (Collidable) body.getUserData();
-                    tool.onCollision(mole); // Hammer hits mole
-                    mole.onCollision(tool); // Mole reacts to hammer
+                    tool.onCollision(mole);
+                    mole.onCollision(tool);
                     hitMoles.add(mole);
                 }
 
-                // Notify non-hit moles with onNoCollision
                 for (Collidable mole : moles) {
                     if (!hitMoles.contains(mole, true)) {
                         mole.onNoCollision();
                     }
                 }
 
-                // If no overlaps, reset the streak
                 if (overlappingBodies.isEmpty() && GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
                     GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-                    System.out.println("Missed! Resetting streak due to hammer miss.");
+                    System.out.println("Missed! Resetting streak and losing a heart.");
                     gameScene.resetStreak();
+                    GameMaster.heartSystem.decreaseHeart();
                 }
             }
 
-            // Update positions for all collidables
             Array<Body> currentBodies = new Array<>();
             world.getBodies(currentBodies);
             for (Body body : currentBodies) {

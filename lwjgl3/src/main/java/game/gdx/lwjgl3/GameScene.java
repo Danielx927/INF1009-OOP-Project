@@ -100,6 +100,13 @@ public class GameScene extends Scene {
 		multiplexer.addProcessor(stage);
 		multiplexer.addProcessor(GameMaster.ioManager);
 		Gdx.input.setInputProcessor(multiplexer);
+		
+		// Use GameMaster's heartSystem instead of creating a new one
+        updateScoreLabel(); // Set initial score position
+        GameMaster.heartSystem.setPosition(
+            scoreLabel.getX() - 70,
+            scoreLabel.getY() - 90
+        );
 	}
 
 	private void generateGrid() {
@@ -181,6 +188,13 @@ public class GameScene extends Scene {
 			}
 		}
 	}
+	
+	// New method to handle mole expiration
+    public void onMoleExpired(InteractiveObject io) {
+        clearTileForObject(io); // Clear the tile
+        em.removeEntity(io); // Remove from EntityManager
+        GameMaster.heartSystem.decreaseHeart(); // Ensure heart drops
+    }
 
 	private void updateScoreLabel() {
 	    // Update texts (keep original font scale for timer)
@@ -203,6 +217,12 @@ public class GameScene extends Scene {
 	    // Positioning (unchanged)
 	    scoreLabel.setPosition(Gdx.graphics.getWidth() - 105, Gdx.graphics.getHeight() - 90);
 	    streakLabel.setPosition(Gdx.graphics.getWidth() - 225, Gdx.graphics.getHeight() - 480);
+	    
+	 // Update heart position when score moves
+        GameMaster.heartSystem.setPosition(
+            scoreLabel.getX() - 70,
+            scoreLabel.getY() - 90
+        );
 	
 	}
 
@@ -285,6 +305,7 @@ public class GameScene extends Scene {
 		// Timer
 		String timeText = String.format("%.2f", timeElapsed);
 		Cfont.draw(batch, timeText, 10, Gdx.graphics.getHeight() - 40);
+		GameMaster.heartSystem.render(batch); // Render hearts in the same batch block
 		batch.end();
 
 		if (!isPaused) {

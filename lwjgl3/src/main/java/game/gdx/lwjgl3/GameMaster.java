@@ -17,6 +17,7 @@ public class GameMaster extends Game {
     public static AnimManager animManager;
     public static EntityManager em;
     public static SceneManager sceneManager;
+    public static HeartSystem heartSystem; // Keep for access, but don’t render here
     public Hammer hammer;
 
     @Override
@@ -50,6 +51,7 @@ public class GameMaster extends Game {
         sceneManager = new SceneManager(this); // Moved after batch creation
         sceneManager.setScene(new MainMenuScene(this));
         System.out.println(sceneManager.getGame());
+        heartSystem = new HeartSystem();
     }
 
     @Override
@@ -77,6 +79,7 @@ public class GameMaster extends Game {
         em.dispose();
         ioManager.dispose();
         animManager.dispose();
+        heartSystem.dispose();
         batch.dispose();
     }
 }
