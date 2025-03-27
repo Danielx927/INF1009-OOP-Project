@@ -94,16 +94,7 @@ public class Tool extends Entity implements Collidable {
     }
 
     @Override
-    // this dont do anything. coords are updated in setCoords anyway. i delete can or not
-    public void updatePosition() {
-//    	if (body != null) {
-//            float newX = body.getPosition().x - getWidth() / 2f;
-//            float newY = body.getPosition().y - getHeight() / 2f;
-//            super.setX(newX);
-//            super.setY(newY);
-//            sprite.setPosition(newX, newY);
-//        }
-    }
+    public void updatePosition() {}
 
     @Override
     public void onCollision(Collidable other) {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import game.gdx.lwjgl3.Entity;
 
 public class SpriteAnimation {
-//	private float frameInterval;
 	private Animation<TextureRegion> anim;
 	private Texture sheet;
 	private int emptyFramesOffset;
@@ -70,12 +69,10 @@ public class SpriteAnimation {
 		
 		// Get current frame of animation for the current stateTime
 		TextureRegion currentFrame = anim.getKeyFrame(stateTime, looping);
-//		b.draw(currentFrame, e.getX() - e.getWidth()/2, e.getY() - e.getHeight()/2);
 //		System.out.println("Frame Width: " + currentFrame.getRegionWidth() + " | Expected: " + e.getWidth());
 //		System.out.println("Frame Height: " + currentFrame.getRegionHeight() + " | Expected: " + e.getHeight());
 //		
 		b.draw(currentFrame, e.getX(), e.getY(), e.getWidth(), e.getHeight());
-
 	}
 
 

@@ -29,7 +29,6 @@ public abstract class Entity {
     }
 
     public Entity(String t, float x, float y) {
-//    	Texture texture = new Texture(Gdx.files.internal(t));
     	textureRegion = new TextureRegion(new Texture(Gdx.files.internal(t)));        
     	this.x = x;
         this.y = y;
@@ -101,6 +100,11 @@ public abstract class Entity {
     public void dispose() {
     	if (textureRegion != null && textureRegion.getTexture() != null) {
             textureRegion.getTexture().dispose();
+        }
+    	
+    	// Properly disposing textures from each SpriteAnim
+    	for (SpriteAnimation anim : animTemplate.values()) {
+            anim.dispose();
         }
         animTemplate.clear();
     }
