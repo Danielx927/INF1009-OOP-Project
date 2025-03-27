@@ -26,6 +26,7 @@ public class MainMenuScene extends Scene {
 
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
+		
 		// Scaling factors
 		float scale = Math.min(screenWidth / 1920f, screenHeight / 1080f);
 
@@ -43,7 +44,7 @@ public class MainMenuScene extends Scene {
 		float quitPadLeft = (screenWidth * buttonsX) - (buttonWidth/2);
 		float quitPadTop = screenHeight - (screenHeight * quitButtonY) - (buttonHeight/2);
 
-		// Global margin for all buttons
+		// Move all buttons together
 		float globalMarginY = 100f * scale;
 		float globalMarginX = 100f * scale;
 
@@ -55,7 +56,6 @@ public class MainMenuScene extends Scene {
 		Texture quitHoverTexture = new Texture(Gdx.files.internal("buttons/quitButtonHover.png"));
 		Texture quitClickTexture = new Texture(Gdx.files.internal("buttons/quitButtonClick.png"));
 
-		// Stretch TextureRegionDrawables
 		// Create stretched TextureRegionDrawables
 		TextureRegionDrawable playUp = new TextureRegionDrawable(new TextureRegion(playTexture));
 		TextureRegionDrawable playHover = new TextureRegionDrawable(new TextureRegion(playHoverTexture));
