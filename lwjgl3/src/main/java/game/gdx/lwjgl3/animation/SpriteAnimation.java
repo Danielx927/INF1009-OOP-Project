@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import game.gdx.lwjgl3.Entity;
+import game.gdx.lwjgl3.entity.Entity;
 
 public class SpriteAnimation {
 	private Animation<TextureRegion> anim;

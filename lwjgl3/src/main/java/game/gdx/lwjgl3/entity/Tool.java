@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import game.gdx.lwjgl3.Collidable;
-import game.gdx.lwjgl3.Entity;
 import game.gdx.lwjgl3.input.IOManager;
 
 public class Tool extends Entity implements Collidable {

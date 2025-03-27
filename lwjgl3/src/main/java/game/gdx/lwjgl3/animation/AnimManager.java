@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 
-import game.gdx.lwjgl3.Entity;
+import game.gdx.lwjgl3.entity.Entity;
 
 public class AnimManager {
 	private static AnimManager instance;

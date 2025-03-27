@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.equation;
 
 public class DivisionEquationGenerator extends MathEquationGenerator {
 

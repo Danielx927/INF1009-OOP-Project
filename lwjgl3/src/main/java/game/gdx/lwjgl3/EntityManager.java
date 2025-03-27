@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import game.gdx.lwjgl3.entity.Entity;
+import game.gdx.lwjgl3.entity.Mole;
 import game.gdx.lwjgl3.entity.Tool;
 
 public class EntityManager {

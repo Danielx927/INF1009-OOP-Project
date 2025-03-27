@@ -1,8 +1,10 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.entity;
 
 import com.badlogic.gdx.physics.box2d.Body;
 
-import game.gdx.lwjgl3.entity.Tool;
+import game.gdx.lwjgl3.Collidable;
+import game.gdx.lwjgl3.GameMaster;
+import game.gdx.lwjgl3.GameScene;
 import game.gdx.lwjgl3.input.IOManager;
 
 public class InteractiveObject extends Entity implements Collidable {

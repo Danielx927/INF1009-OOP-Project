@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.entity;
 
 public class GameTile extends Entity {
 
@@ -13,7 +13,7 @@ public class GameTile extends Entity {
 		return isOccupied;
 	}
 	
-	void setOccupied(boolean b) {
+	public void setOccupied(boolean b) {
 		isOccupied = b;
 	}
 }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+
+import game.gdx.lwjgl3.entity.Mole;
 import game.gdx.lwjgl3.entity.Tool;
 
 public class CollisionManager {

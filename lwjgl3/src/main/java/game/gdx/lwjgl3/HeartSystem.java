@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
+import game.gdx.lwjgl3.entity.Entity;
+
 public class HeartSystem extends Entity {
     private int maxHearts = 3;
     private int currentHearts;
