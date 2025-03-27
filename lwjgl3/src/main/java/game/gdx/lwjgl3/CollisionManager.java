@@ -20,6 +20,11 @@ public class CollisionManager {
         this.bodies = new Array<>();
         this.moles = new Array<>();
     }
+
+    public void setTool(Tool tool) {
+        this.tool = tool;
+    }
+
     
     public void setListener(CollisionListener listener) {
         this.listener = listener;
@@ -90,7 +95,6 @@ public class CollisionManager {
         CollisionConfig config;
         if (c instanceof Tool) {
             config = new CollisionConfig((short) 0x0001, (short) 0x0002);
-            this.tool = (Tool) c;
         } else {
             config = new CollisionConfig((short) 0x0002, (short) 0x0001);
             moles.add(c);
