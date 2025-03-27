@@ -199,6 +199,7 @@ public class EndScene extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameMaster.ioManager.playSound("buttonClick", 0.3f);
+                GameMaster.heartSystem.reset(); // Reset hearts to 3
                 GameMaster.sceneManager.setScene(new GameScene(game));
             }
         });

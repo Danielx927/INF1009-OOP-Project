@@ -45,6 +45,17 @@ public class HeartSystem {
     public boolean isGameOver() {
         return currentHearts <= 0;
     }
+    
+ // Add reset method to restore hearts
+    public void reset() {
+        currentHearts = maxHearts;
+        heartSprites.clear();
+        for (int i = 0; i < maxHearts; i++) {
+            Sprite heart = new Sprite(heartTexture);
+            heart.setScale(scale);
+            heartSprites.add(heart);
+        }
+    }
 
     public void render(SpriteBatch batch) {
         for (Sprite heart : heartSprites) {
