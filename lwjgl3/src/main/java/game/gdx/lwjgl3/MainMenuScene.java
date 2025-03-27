@@ -117,8 +117,6 @@ public class MainMenuScene extends Scene {
 
 	@Override
 	public void render(float delta) {
-		EquationGenerator randomEq = EquationGeneratorFactory.randomGenerator();
-		System.out.println(randomEq.generateEquation());
 		Gdx.gl.glClearColor(0, 0, 0, 1);
     	batch.begin();
     	batch.draw(this.getBackground(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
