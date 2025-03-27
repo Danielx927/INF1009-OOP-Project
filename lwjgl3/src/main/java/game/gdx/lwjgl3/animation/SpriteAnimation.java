@@ -78,7 +78,7 @@ public class SpriteAnimation {
 
 	
 	public void dispose() {
-		sheet.dispose();
+		if (this.sheet != null) sheet.dispose();
 	}
 		
 }
