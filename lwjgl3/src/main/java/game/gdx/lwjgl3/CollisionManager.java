@@ -35,7 +35,7 @@ public class CollisionManager {
 
         for (int i = moles.size - 1; i >= 0; i--) {
             Collidable mole = moles.get(i);
-            if (mole instanceof InteractiveObject io) {
+            if (mole instanceof Mole io) {
                 io.decreaseTime(Gdx.graphics.getDeltaTime());
                 if (io.getTimeLeft() <= 0) {
                     if (listener != null) {
