@@ -43,7 +43,7 @@ public class EndScene extends Scene {
 		// Font for Timer and Score
 		font = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
 				Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
-		font.getData().setScale(0.5f);
+		font.getData().setScale(0.5f); 
 
 		// LabelStyle for Timer and Score
 		Label.LabelStyle labelStyle = new LabelStyle();
