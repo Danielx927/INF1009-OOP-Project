@@ -58,16 +58,7 @@ public class Mole extends InteractiveObject {
     
     @Override
     public void render(SpriteBatch b) {
-        if (getCurrentAnim() != null) {
-            if (getCurrentAnim().isAnimationFinished()) {
-                setCurrentAnimFinished();
-                b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
-            } else {
-                getCurrentAnim().render(b, this, false);
-            }
-        } else {
-            b.draw(getTexture(), getX(), getY(), getWidth(), getHeight());
-        }
+        super.render(b);
         if (assignedAnswer != 0) {
             float boxX = getX() + getWidth() / 2 - 25;
             float boxY = getY() + getHeight() + 5;
