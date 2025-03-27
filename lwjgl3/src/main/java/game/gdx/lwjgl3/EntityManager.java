@@ -40,15 +40,17 @@ public class EntityManager {
         for (Entity e : entityList) {
             if (e instanceof InteractiveObject) {
                 InteractiveObject obj = (InteractiveObject) e;
-                if (!obj.isActive(delta)) {
+                if (!obj.isActive(delta)) { // Updates lifeTime and checks expiration
                     ioToRemove.add(obj);
                     if (gameScene != null && !obj.wasHit) {
-                        // Only reset streak and clear tile if not hit (missed)
-                        System.out.println("Resetting streak due to miss");
+                        // Mole timed out without being hit
+                        System.out.println("Mole timed out! Losing a heart and resetting streak.");
+                        if (GameMaster.heartSystem.getCurrentHearts() > 0) { // Ensure heart decreases only if available
+                            GameMaster.heartSystem.decreaseHeart();
+                        }
                         gameScene.resetStreak();
-                        gameScene.clearTileForObject(obj); // Clear tile on miss
+                        gameScene.clearTileForObject(obj);
                     }
-                    // Note: No need to clear tile here if hit, as it’s done in onCollision
                 }
             }
         }
