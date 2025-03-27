@@ -26,7 +26,7 @@ public class GameMaster extends Game {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch = new SpriteBatch();
-        collisionManager = new CollisionManager();
+        collisionManager = new CollisionManager(null);
         em = new EntityManager();
 
         hammer = new Hammer("sprites/hammer.png", 100, 100);

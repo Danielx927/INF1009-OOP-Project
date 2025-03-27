@@ -8,16 +8,23 @@ import game.gdx.lwjgl3.entity.Tool;
 
 public class CollisionManager {
     private PhysicsManager physicsManager;
-    private Array<Body> bodies; // Kept for compatibility, but delegates to PhysicsManager
+    private Array<Body> bodies;
     private Tool tool;
     private boolean clickOccurred = false;
-    private Array<Collidable> moles; // To track all moles for onNoCollision
+    private Array<Collidable> moles;
+    private CollisionListener listener;
 
-    public CollisionManager() {
+    public CollisionManager(CollisionListener listener) {
         this.physicsManager = new PhysicsManager();
-        bodies = new Array<>(); // Unused directly, but kept for API compatibility
-        moles = new Array<>(); // Initialize list to track moles
+        this.listener = listener;
+        this.bodies = new Array<>();
+        this.moles = new Array<>();
     }
+    
+    public void setListener(CollisionListener listener) {
+        this.listener = listener;
+    }
+
 
     public void notifyClick() {
         clickOccurred = true;
@@ -26,17 +33,13 @@ public class CollisionManager {
     public void checkCollisions() {
         physicsManager.step();
 
-        // Check mole timeouts
         for (int i = moles.size - 1; i >= 0; i--) {
             Collidable mole = moles.get(i);
-            if (mole instanceof InteractiveObject) {
-                InteractiveObject io = (InteractiveObject) mole;
+            if (mole instanceof InteractiveObject io) {
                 io.decreaseTime(Gdx.graphics.getDeltaTime());
                 if (io.getTimeLeft() <= 0) {
-                    System.out.println("Mole timed out! Losing a heart.");
-                    if (GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
-                        GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-                        gameScene.onMoleExpired(io); // Call GameScene method
+                    if (listener != null) {
+                        listener.onMoleExpired(io);
                     }
                     removeCollidable(mole);
                 }
@@ -61,6 +64,10 @@ public class CollisionManager {
                         tool.onCollision(mole);
                         mole.onCollision(tool);
                         hitMoles.add(mole);
+
+                        if (listener != null) {
+                            listener.onMoleHit(mole);
+                        }
                     }
                 }
 
@@ -70,12 +77,8 @@ public class CollisionManager {
                     }
                 }
 
-                // Check if the click missed all moles
-                if (hitMoles.isEmpty() && GameMaster.sceneManager.getCurrentScene() instanceof GameScene) {
-                    GameScene gameScene = (GameScene) GameMaster.sceneManager.getCurrentScene();
-                    System.out.println("Missed! Resetting streak and losing a heart.");
-                    gameScene.resetStreak();
-                    GameMaster.heartSystem.decreaseHeart(); // Decrease heart on miss
+                if (hitMoles.isEmpty() && listener != null) {
+                    listener.onMiss();
                 }
             }
 
@@ -86,11 +89,11 @@ public class CollisionManager {
     public void addCollidable(Collidable c) {
         CollisionConfig config;
         if (c instanceof Tool) {
-            config = new CollisionConfig((short) 0x0001, (short) 0x0002); // Cast to short
-            this.tool = (Tool) c; // Store the tool instance
+            config = new CollisionConfig((short) 0x0001, (short) 0x0002);
+            this.tool = (Tool) c;
         } else {
-            config = new CollisionConfig((short) 0x0002, (short) 0x0001); // Cast to short
-            moles.add(c); // Add to moles list for onNoCollision
+            config = new CollisionConfig((short) 0x0002, (short) 0x0001);
+            moles.add(c);
         }
         physicsManager.addBody(c, config);
     }
@@ -98,11 +101,12 @@ public class CollisionManager {
     public void removeCollidable(Collidable c) {
         physicsManager.removeBody(c);
         if (c instanceof Tool) {
-            this.tool = null; // Clear tool reference if removed
+            this.tool = null;
         } else if (c instanceof InteractiveObject) {
-            moles.removeValue(c, true); // Remove from moles list
+            moles.removeValue(c, true);
         }
     }
+
 
     public void dispose() {
         physicsManager.dispose();

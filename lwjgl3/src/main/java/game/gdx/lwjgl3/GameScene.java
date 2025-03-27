@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class GameScene extends Scene {
+public class GameScene extends Scene implements CollisionListener{
 	protected GameMaster game;
 	private float spawnTimer = 0f;
 	private float spawnInterval = 2f;
@@ -42,6 +42,7 @@ public class GameScene extends Scene {
 
 	public GameScene(GameMaster game) {
 		super(game);
+		GameMaster.collisionManager.setListener(this); // Attach GameScene as the listener
 		this.game = game;
 		this.em = new EntityManager(this);
 		this.generateGrid();
@@ -199,12 +200,37 @@ public class GameScene extends Scene {
 		}
 	}
 	
-	// New method to handle mole expiration
-    public void onMoleExpired(InteractiveObject io) {
-        clearTileForObject(io); // Clear the tile
-        em.removeEntity(io); // Remove from EntityManager
-        GameMaster.heartSystem.decreaseHeart(); // Ensure heart drops
-    }
+	@Override
+	public void onMoleHit(Collidable mole) {
+	    if (mole instanceof InteractiveObject io) {
+	        if (io.isCorrect()) {
+	            int awarded = getPointsToAward(100);
+	            addPoints(awarded);
+	            GameMaster.ioManager.playSound("correct", 1.0f);
+	            refreshEquation();
+	        } else {
+	            GameMaster.ioManager.playSound("wrong", 1.0f);
+	            resetStreak();
+	            GameMaster.heartSystem.decreaseHeart();
+	        }
+	        clearTileForObject(io);
+	        em.removeEntity(io);
+	    }
+	}
+
+	@Override
+	public void onMiss() {
+	    resetStreak();
+	    GameMaster.heartSystem.decreaseHeart();
+	}
+
+	@Override
+	public void onMoleExpired(InteractiveObject io) {
+	    clearTileForObject(io);
+	    em.removeEntity(io);
+	    GameMaster.heartSystem.decreaseHeart();
+	}
+
 
 	private void updateScoreLabel() {
 	    // Update texts (keep original font scale for timer)
