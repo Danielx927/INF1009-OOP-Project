@@ -118,9 +118,31 @@ public class MainMenuScene extends Scene {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-    	batch.begin();
-    	batch.draw(this.getBackground(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    	batch.end();
+		
+	    float screenWidth = Gdx.graphics.getWidth();
+	    float screenHeight = Gdx.graphics.getHeight();
+	    
+	    float bgWidth = 640;
+	    float bgHeight = 480;
+	    
+	    if (Gdx.graphics.isFullscreen()) {
+	        float scale = Math.max(screenWidth / bgWidth, screenHeight / bgHeight);
+	        float scaledWidth = bgWidth * scale;
+	        float scaledHeight = bgHeight * scale;
+	        
+	        float x = (screenWidth - scaledWidth) / 2;
+	        float y = (screenHeight - scaledHeight) / 2;
+
+	        batch.begin();
+	        batch.draw(background, x, y, scaledWidth, scaledHeight);
+	        batch.end();
+	        
+	    } else {
+	    	// Keep manual size when not fullscreen
+	        batch.begin();
+	        batch.draw(background, 0, 0, bgWidth, bgHeight);
+	        batch.end();
+	    }
     	
         // Update and draw the stage (UI)
         stage.act(delta);
