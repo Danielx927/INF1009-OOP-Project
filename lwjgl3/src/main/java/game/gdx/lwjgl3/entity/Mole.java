@@ -68,20 +68,20 @@ public class Mole extends InteractiveObject {
         } else {
             b.draw(getTextureRegion(), getX(), getY(), getWidth(), getHeight());
         }
-        if (assignedAnswer >= 0) {
-            float boxX = getX() + getWidth() / 2 - 25;
-            float boxY = getY() + getHeight() + 5;
+        
+        float boxX = getX() + getWidth() / 2 - 25;
+        float boxY = getY() + getHeight() + 5;
 
-            b.setColor(isCorrect ? Color.GREEN : Color.RED);
-            answerBox.draw(b, boxX, boxY, 50, 30);
-            b.setColor(Color.WHITE);
+        b.setColor(isCorrect ? Color.GREEN : Color.RED);
+        answerBox.draw(b, boxX, boxY, 50, 30);
+        b.setColor(Color.WHITE);
 
-            String answer = String.valueOf(assignedAnswer);
-            GlyphLayout layout = new GlyphLayout(answerFont, answer);
-            answerFont.draw(b, answer,
-                    boxX + 25 - layout.width / 2,
-                    boxY + 20 + layout.height / 2);
-        }
+        String answer = String.valueOf(assignedAnswer);
+        GlyphLayout layout = new GlyphLayout(answerFont, answer);
+        answerFont.draw(b, answer,
+                boxX + 25 - layout.width / 2,
+                boxY + 20 + layout.height / 2);
+      
     }
     @Override
     public void dispose() {

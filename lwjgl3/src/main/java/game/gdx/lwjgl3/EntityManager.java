@@ -83,6 +83,5 @@ public class EntityManager {
             e.dispose();
         }
         entityList.clear();
-        entityList = null;
     }
 }
