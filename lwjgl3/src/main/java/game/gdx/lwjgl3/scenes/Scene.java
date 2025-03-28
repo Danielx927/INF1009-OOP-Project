@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import game.gdx.lwjgl3.GameMaster;
 
 public abstract class Scene implements Screen {
 	
@@ -28,7 +30,7 @@ public abstract class Scene implements Screen {
 	}
 	
 	public void show() {
-		Gdx.input.setCursorCatched(true);
+		Gdx.input.setCursorCatched(false);
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(stage);  // Handle UI interactions
 		multiplexer.addProcessor(GameMaster.ioManager);  // Handle custom cursor and game controls

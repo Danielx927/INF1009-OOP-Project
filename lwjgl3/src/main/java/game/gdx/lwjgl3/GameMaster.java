@@ -12,9 +12,11 @@ import game.gdx.lwjgl3.entity.EntityManager;
 import game.gdx.lwjgl3.entity.Hammer;
 import game.gdx.lwjgl3.entity.HeartSystem;
 import game.gdx.lwjgl3.input.IOManager;
+import game.gdx.lwjgl3.scenes.MainMenuScene;
+import game.gdx.lwjgl3.scenes.SceneManager;
 
 public class GameMaster extends Game {
-    protected SpriteBatch batch;
+    public static SpriteBatch batch;
     public static CollisionManager collisionManager;
     public static IOManager ioManager;
     public static AnimManager animManager;
