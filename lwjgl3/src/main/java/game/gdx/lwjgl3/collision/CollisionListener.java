@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.collision;
 
 import game.gdx.lwjgl3.entity.Mole;
 

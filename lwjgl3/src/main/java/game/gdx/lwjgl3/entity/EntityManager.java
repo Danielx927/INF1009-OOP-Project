@@ -1,12 +1,12 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import game.gdx.lwjgl3.entity.Entity;
-import game.gdx.lwjgl3.entity.Mole;
-import game.gdx.lwjgl3.entity.Tool;
+import game.gdx.lwjgl3.GameMaster;
+import game.gdx.lwjgl3.GameScene;
+import game.gdx.lwjgl3.collision.Collidable;
 
 public class EntityManager {
     private GameScene gameScene;

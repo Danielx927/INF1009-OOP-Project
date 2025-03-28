@@ -1,4 +1,4 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.collision;
 
 public class CollisionConfig {
     public short categoryBits;

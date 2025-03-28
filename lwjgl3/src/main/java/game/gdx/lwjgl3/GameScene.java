@@ -14,12 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import game.gdx.lwjgl3.collision.Collidable;
+import game.gdx.lwjgl3.collision.CollisionListener;
+import game.gdx.lwjgl3.entity.EntityManager;
 import game.gdx.lwjgl3.entity.GameTile;
 import game.gdx.lwjgl3.entity.InteractiveObject;
 import game.gdx.lwjgl3.entity.Mole;
 import game.gdx.lwjgl3.equation.EquationGenerator;
 import game.gdx.lwjgl3.equation.EquationGeneratorFactory;
-import game.gdx.lwjgl3.equation.MathEquationGenerator;
 
 public class GameScene extends Scene implements CollisionListener {
 	protected GameMaster game;

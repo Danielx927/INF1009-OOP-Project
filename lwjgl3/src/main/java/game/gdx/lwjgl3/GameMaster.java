@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.gdx.lwjgl3.animation.AnimManager;
+import game.gdx.lwjgl3.collision.CollisionManager;
+import game.gdx.lwjgl3.entity.EntityManager;
 import game.gdx.lwjgl3.entity.Hammer;
+import game.gdx.lwjgl3.entity.HeartSystem;
 import game.gdx.lwjgl3.input.IOManager;
 
 public class GameMaster extends Game {
