@@ -37,6 +37,26 @@ public class InteractiveObject extends Entity implements Collidable {
     }
 
     @Override
+    public float getX() {
+        return super.getX();
+    }
+
+    @Override
+    public float getY() {
+        return super.getY();
+    }
+
+    @Override
+    public float getWidth() {
+        return super.getWidth();
+    }
+
+    @Override
+    public float getHeight() {
+        return super.getHeight();
+    }
+
+    @Override
     public Body getBody() {
         return body;
     }

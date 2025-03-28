@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Mole extends InteractiveObject {
     private int points;
+    public boolean wasHit = false;
     private int assignedAnswer;
     private boolean isCorrect;
     private NinePatch answerBox;
