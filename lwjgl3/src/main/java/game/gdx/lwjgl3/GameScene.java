@@ -18,7 +18,6 @@ import game.gdx.lwjgl3.collision.Collidable;
 import game.gdx.lwjgl3.collision.CollisionListener;
 import game.gdx.lwjgl3.entity.EntityManager;
 import game.gdx.lwjgl3.entity.GameTile;
-import game.gdx.lwjgl3.entity.InteractiveObject;
 import game.gdx.lwjgl3.entity.Mole;
 import game.gdx.lwjgl3.equation.EquationGenerator;
 import game.gdx.lwjgl3.equation.EquationGeneratorFactory;
@@ -26,8 +25,8 @@ import game.gdx.lwjgl3.equation.EquationGeneratorFactory;
 public class GameScene extends Scene implements CollisionListener {
 	protected GameMaster game;
 	private float spawnTimer = 0f;
-	private float spawnInterval = 2f;
-	private float minSpawnInterval = 0.5f;
+	private float spawnInterval = 3f;
+	private float minSpawnInterval = 2f;
 	private float timeElapsed = 0f;
 	private GameTile[][] grid;
 	private EntityManager em;
@@ -282,7 +281,7 @@ public class GameScene extends Scene implements CollisionListener {
 		updateScoreLabel();
 	}
 
-	public void clearTileForObject(InteractiveObject io) {
+	public void clearTileForObject(Mole io) {
 		for (int row = 0; row < grid.length; row++) {
 			for (int col = 0; col < grid[0].length; col++) {
 				GameTile tile = grid[row][col];
@@ -503,7 +502,7 @@ public class GameScene extends Scene implements CollisionListener {
 		if (!isPaused) {
 			timeElapsed += delta;
 			// Adjusted for faster spawning
-			spawnInterval = Math.max(minSpawnInterval, 2f - (timeElapsed / 5f) * 0.5f);
+			spawnInterval = Math.max(minSpawnInterval, 4f - (timeElapsed / 5f) * 0.5f);
 			// System.out.println("Current spawnInterval: " + spawnInterval + ", spawnTimer:
 			// " + spawnTimer);
 
