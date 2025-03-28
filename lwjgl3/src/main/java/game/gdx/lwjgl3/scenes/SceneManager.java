@@ -1,5 +1,5 @@
-package game.gdx.lwjgl3.scene;
 
+package game.gdx.lwjgl3.scenes;
 import com.badlogic.gdx.Screen;
 
 import game.gdx.lwjgl3.GameMaster;

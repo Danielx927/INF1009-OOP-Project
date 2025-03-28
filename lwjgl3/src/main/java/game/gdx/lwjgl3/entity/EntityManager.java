@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import game.gdx.lwjgl3.GameMaster;
 import game.gdx.lwjgl3.collision.Collidable;
-import game.gdx.lwjgl3.scene.GameScene;
+import game.gdx.lwjgl3.scenes.GameScene;
 
 public class EntityManager {
     private GameScene gameScene;

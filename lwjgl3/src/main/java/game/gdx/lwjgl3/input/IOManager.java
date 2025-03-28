@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Queue;
 import game.gdx.lwjgl3.GameMaster;
 import game.gdx.lwjgl3.audio.MusicQueueItem;
 import game.gdx.lwjgl3.entity.Tool;
-import game.gdx.lwjgl3.scene.GameScene;
+import game.gdx.lwjgl3.scenes.GameScene;
 
 public class IOManager implements InputProcessor, Audio {
 	private static IOManager instance;
