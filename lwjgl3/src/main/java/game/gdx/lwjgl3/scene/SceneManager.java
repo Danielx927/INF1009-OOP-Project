@@ -1,6 +1,8 @@
-package game.gdx.lwjgl3;
+package game.gdx.lwjgl3.scene;
 
 import com.badlogic.gdx.Screen;
+
+import game.gdx.lwjgl3.GameMaster;
 
 public class SceneManager {
 	private GameMaster game;
