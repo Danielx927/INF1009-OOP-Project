@@ -26,6 +26,13 @@ public class HeartSystem extends Entity {
             heartSprites.add(heart);
         }
     }
+    
+    public void setScale(float newScale) {
+        scale = newScale;
+        for (Sprite heart : heartSprites) {
+            heart.setScale(scale);
+        }
+    }
 
     public void setPosition(float x, float y) {
         for (int i = 0; i < heartSprites.size; i++) {

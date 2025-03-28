@@ -29,7 +29,11 @@ public class Mole extends InteractiveObject {
 
         answerFont = new BitmapFont(Gdx.files.internal("fonts/CharlemagneSTD_Size68.fnt"),
                 Gdx.files.internal("fonts/CharlemagneSTD_Size68.png"), false);
-        answerFont.getData().setScale(0.6f);
+        if (Gdx.graphics.isFullscreen()) {
+        	answerFont.getData().setScale(1f);
+        } else {
+        	answerFont.getData().setScale(0.5f);
+        }
         answerFont.setColor(Color.WHITE);
 
         isCorrect = true;
